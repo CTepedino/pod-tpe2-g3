@@ -1,8 +1,22 @@
 package ar.edu.itba.pod.client.query;
 
+import ar.edu.itba.pod.client.csvParser.CHI.CHICSVParser;
+import ar.edu.itba.pod.client.csvParser.CityCSVParser;
+import ar.edu.itba.pod.client.csvParser.NYC.NYCCSVParser;
+
 public enum City {
-    NEW_YORK("NYC"),
-    CHICAGO("CHI");
+    NEW_YORK("NYC"){
+        @Override
+        public CityCSVParser getParser(String path){
+            return new NYCCSVParser(path);
+        }
+    },
+    CHICAGO("CHI"){
+        @Override
+        public CityCSVParser getParser(String path) {
+            return new CHICSVParser(path);
+        }
+    };
 
     private final String cityCode;
 
@@ -23,5 +37,6 @@ public enum City {
         return null;
     }
 
+    public abstract CityCSVParser getParser(String path);
 
 }

@@ -9,7 +9,7 @@ import ar.edu.itba.pod.client.query.City;
 
 public class CHICSVParser extends CityCSVParser {
     public CHICSVParser(String path){
-        super(path, City.CHICAGO.getCityCode());
+        super(path, "CHI");
     }
 
     @Override

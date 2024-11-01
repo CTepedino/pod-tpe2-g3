@@ -9,7 +9,7 @@ import ar.edu.itba.pod.client.query.City;
 
 public class NYCCSVParser extends CityCSVParser {
     public NYCCSVParser(String path){
-        super(path, City.NEW_YORK.getCityCode());
+        super(path, "NYC");
     }
 
     @Override

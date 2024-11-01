@@ -4,7 +4,7 @@ import ar.edu.itba.pod.api.model.Agency;
 import ar.edu.itba.pod.api.model.Infraction;
 import ar.edu.itba.pod.api.model.Ticket;
 
-public abstract class CityCSVParser {
+public abstract class CityCSVParserFactory {
 
     private static final String TICKETS_CSV_FILENAME = "tickets";
     private static final String INFRACTION_CSV_FILENAME = "infractions";
@@ -14,7 +14,7 @@ public abstract class CityCSVParser {
     private final String path;
     private final String cityCode;
 
-    protected CityCSVParser(String path, String cityCode){
+    protected CityCSVParserFactory(String path, String cityCode){
         this.path = path;
         this.cityCode = cityCode;
     }

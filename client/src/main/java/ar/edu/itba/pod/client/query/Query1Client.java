@@ -1,6 +1,5 @@
 package ar.edu.itba.pod.client.query;
 
-
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
 import org.slf4j.Logger;
@@ -22,8 +21,6 @@ public class Query1Client{
 
         try {
             HazelcastInstance hazelcastInstance = ClientUtils.startHazelcast(parser.getAddresses());
-
-
 
         } finally {
             HazelcastClient.shutdownAll();

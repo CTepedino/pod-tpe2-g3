@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 
 public class CHITicketLineParser implements CSVLineParser<Ticket> {
     private static final String SEPARATOR = ";";
-    private static final String DATE_FORMAT = "yyyy-MM-DD HH:mm:ss";
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     @Override
     public Ticket parseLine(String line) {

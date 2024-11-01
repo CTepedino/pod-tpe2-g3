@@ -1,13 +1,13 @@
 package ar.edu.itba.pod.client.csvParser.NYC;
 
 import ar.edu.itba.pod.client.csvParser.CSVFileParser;
-import ar.edu.itba.pod.client.csvParser.CityCSVParser;
+import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;
 import ar.edu.itba.pod.api.model.Agency;
 import ar.edu.itba.pod.api.model.Infraction;
 import ar.edu.itba.pod.api.model.Ticket;
 
-public class NYCCSVParser extends CityCSVParser {
-    public NYCCSVParser(String path){
+public class NYCCSVParserFactory extends CityCSVParserFactory {
+    public NYCCSVParserFactory(String path){
         super(path, "NYC");
     }
 

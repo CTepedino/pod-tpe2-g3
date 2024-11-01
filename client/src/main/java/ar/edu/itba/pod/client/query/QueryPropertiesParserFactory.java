@@ -12,20 +12,23 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class QueryPropertiesParserFactory {
-    private boolean n = false;
+    private int n = 0;
     private boolean dateRange = false;
     private boolean agency = false;
 
-    public void useN(){
-        n = true;
+    public QueryPropertiesParserFactory useN(int n){
+        this.n = n;
+        return this;
     }
 
-    public void useDateRange(){
+    public QueryPropertiesParserFactory useDateRange(){
         dateRange = true;
+        return this;
     }
 
-    public void useAgency(){
+    public QueryPropertiesParserFactory useAgency(){
         agency = true;
+        return this;
     }
 
     public QueryPropertiesParser build(){
@@ -35,7 +38,7 @@ public class QueryPropertiesParserFactory {
     public static class QueryPropertiesParser{
         private static final Logger logger = LoggerFactory.getLogger(QueryPropertiesParser.class);
 
-        private static final String IPV4_PATTERN = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$";
+        private static final String IPV4_PATTERN = "^(localhost|(((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)))(:\\d{1,5})?$";
 
         private final List<String> addresses;
         private final City city;
@@ -47,13 +50,13 @@ public class QueryPropertiesParserFactory {
         private String agency;
 
 
-        private QueryPropertiesParser(boolean useN, boolean useDateRange, boolean useAgency){
+        private QueryPropertiesParser(int minN, boolean useDateRange, boolean useAgency){
             addresses = parseAddresses();
             city = parseCity();
             inPath = parsePath("inPath");//TODO: verificar que existan los csv en el directorio de entrada
             outPath = parsePath("outPath");
-            if (useN){
-                n = parseN();
+            if (minN != 0){
+                n = parseN(minN);
             }
             if (useDateRange){
                 to = parseDate("to");
@@ -79,7 +82,7 @@ public class QueryPropertiesParserFactory {
             StringTokenizer tokenizer = new StringTokenizer(addressesString, ";");
             while(tokenizer.hasMoreTokens()){
                 String address = tokenizer.nextToken();
-                if (!(address.equals("localhost") || address.matches(IPV4_PATTERN))){
+                if (!address.matches(IPV4_PATTERN)){
                     logger.error("Invalid address: {}", address);
                     throw new IllegalStateException();
                 }
@@ -119,14 +122,19 @@ public class QueryPropertiesParserFactory {
             return path;
         }
 
-        private int parseN(){
+        private int parseN(int minN){
             String numberString = System.getProperty("n");
             if (numberString == null){
                 logger.error("No number specified");
                 throw new IllegalStateException();
             }
             try {
-                return Integer.parseInt(numberString);
+                int n = Integer.parseInt(numberString);
+                if (n < minN){
+                    logger.error("N must be at least {}", minN);
+                    throw new IllegalStateException();
+                }
+                return n;
             } catch (NumberFormatException e){
                 logger.error("Invalid number {}", numberString);
                 throw new IllegalStateException();

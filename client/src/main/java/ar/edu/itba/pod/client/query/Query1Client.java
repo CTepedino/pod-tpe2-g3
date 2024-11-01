@@ -19,6 +19,7 @@ public class Query1Client{
 
         QueryPropertiesParserFactory.QueryPropertiesParser parser = new QueryPropertiesParserFactory().build();
 
+
         try {
             HazelcastInstance hazelcastInstance = ClientUtils.startHazelcast(parser.getAddresses());
 
@@ -27,6 +28,7 @@ public class Query1Client{
         } finally {
             HazelcastClient.shutdownAll();
         }
+
 
 
     }

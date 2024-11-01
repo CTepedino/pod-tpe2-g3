@@ -46,4 +46,28 @@ public class Ticket implements DataSerializable {
         issueDate = in.readObject();
         countyName = in.readUTF();
     }
+
+    public String getPlate() {
+        return plate;
+    }
+
+    public String getInfractionId() {
+        return infractionId;
+    }
+
+    public double getFineAmount() {
+        return fineAmount;
+    }
+
+    public String getIssuingAgency() {
+        return issuingAgency;
+    }
+
+    public LocalDate getIssueDate() {
+        return issueDate;
+    }
+
+    public String getCountyName() {
+        return countyName;
+    }
 }

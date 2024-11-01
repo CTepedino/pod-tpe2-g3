@@ -5,7 +5,6 @@ import ar.edu.itba.pod.client.csvParser.CityCSVParser;
 import ar.edu.itba.pod.api.model.Agency;
 import ar.edu.itba.pod.api.model.Infraction;
 import ar.edu.itba.pod.api.model.Ticket;
-import ar.edu.itba.pod.client.query.City;
 
 public class NYCCSVParser extends CityCSVParser {
     public NYCCSVParser(String path){

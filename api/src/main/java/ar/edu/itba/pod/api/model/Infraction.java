@@ -28,4 +28,12 @@ public class Infraction implements DataSerializable {
         id = in.readUTF();
         definition = in.readUTF();
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getDefinition() {
+        return definition;
+    }
 }

@@ -24,4 +24,9 @@ public class Agency implements DataSerializable {
     public void readData(ObjectDataInput in) throws IOException {
         issuingAgency = in.readUTF();
     }
+
+    public String getIssuingAgency() {
+        return issuingAgency;
+    }
 }
+

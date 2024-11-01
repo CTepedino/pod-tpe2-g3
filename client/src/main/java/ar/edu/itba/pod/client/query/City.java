@@ -4,10 +4,14 @@ public enum City {
     NEW_YORK("NYC"),
     CHICAGO("CHI");
 
-    private String cityCode;
+    private final String cityCode;
 
     City(String cityCode) {
         this.cityCode = cityCode;
+    }
+
+    public String getCityCode() {
+        return cityCode;
     }
 
     public static City fromCode(String code) {
@@ -18,4 +22,6 @@ public enum City {
         }
         return null;
     }
+
+
 }

@@ -50,7 +50,7 @@ public class QueryPropertiesParserFactory {
         private QueryPropertiesParser(boolean useN, boolean useDateRange, boolean useAgency){
             addresses = parseAddresses();
             city = parseCity();
-            inPath = parsePath("inPath");
+            inPath = parsePath("inPath");//TODO: verificar que existan los csv en el directorio de entrada
             outPath = parsePath("outPath");
             if (useN){
                 n = parseN();

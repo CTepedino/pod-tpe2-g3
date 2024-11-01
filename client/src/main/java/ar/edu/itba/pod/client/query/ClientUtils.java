@@ -9,7 +9,9 @@ import com.hazelcast.core.HazelcastInstance;
 
 import java.util.List;
 
-public abstract class ClientUtils {
+public class ClientUtils {
+
+    private ClientUtils(){}
 
     public static HazelcastInstance startHazelcast(List<String> addresses){
         // Group Config

@@ -1,6 +1,7 @@
 package ar.edu.itba.pod.client.query;
 
 import ar.edu.itba.pod.api.model.Ticket;
+import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
 import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
@@ -32,10 +33,10 @@ public class Query1Client{
             CityCSVParserFactory parserFactory = properties.getCity().getParser(properties.getInPath());
 
             AtomicLong incrementalKey = new AtomicLong();
-            Map<Long, Ticket> tickets = hazelcastInstance.getMap("g3-ticket");
+            Map<Long, InfractionAgencyPair> tickets = hazelcastInstance.getMap("g3-ticket");
             tickets.clear();
             parserFactory.getTicketFileParser().consumeAll( t ->
-                    tickets.put(incrementalKey.incrementAndGet(), t)
+                    tickets.putIfAbsent(incrementalKey.incrementAndGet(), new InfractionAgencyPair(t.getIssuingAgency(), t.getIssuingAgency()))
             );
 
 

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
+import java.util.concurrent.ExecutorService;
 
 public class Server {
 
@@ -37,6 +38,13 @@ public class Server {
                 .setUrl("http://localhost:8081/mancenter/")
                 .setEnabled(false);
         config.setManagementCenterConfig(managementCenterConfig);
+
+/*        ExecutorConfig executorConfig = new ExecutorConfig()
+                .setName("g3-executor")
+                .setPoolSize(16)
+                .setQueueCapacity(1000);
+
+        config.addExecutorConfig(executorConfig);*/
 
         // Opcional: Logger detallado
 //        java.util.logging.Logger rootLogger = LogManager.getLogManager().getLogger("");

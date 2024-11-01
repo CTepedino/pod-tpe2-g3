@@ -4,11 +4,14 @@ import ar.edu.itba.pod.api.model.Ticket;
 import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IExecutorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -35,14 +38,10 @@ public class Query1Client{
                     tickets.put(incrementalKey.incrementAndGet(), t)
             );
 
-            System.out.println("done");
-            System.out.println(tickets.size());
 
         } finally {
             HazelcastClient.shutdownAll();
         }
-
-
 
     }
 

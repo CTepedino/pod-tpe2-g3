@@ -4,8 +4,9 @@ import ar.edu.itba.pod.client.csvParser.CSVLineParser;
 import ar.edu.itba.pod.api.model.Infraction;
 
 import java.util.StringTokenizer;
+import java.util.function.Function;
 
-public class CHIInfractionLineParser implements CSVLineParser<Infraction> {
+public class CHIInfractionLineParser extends CSVLineParser<Infraction> {
     private static final String SEPARATOR = ";";
 
 
@@ -16,4 +17,5 @@ public class CHIInfractionLineParser implements CSVLineParser<Infraction> {
         String description = tokenizer.nextToken();
         return new Infraction(code, description);
     }
+
 }

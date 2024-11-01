@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.StringTokenizer;
 
-public class NYCTicketLineParser implements CSVLineParser<Ticket> {
+public class NYCTicketLineParser extends CSVLineParser<Ticket> {
     private static final String SEPARATOR = ";";
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 

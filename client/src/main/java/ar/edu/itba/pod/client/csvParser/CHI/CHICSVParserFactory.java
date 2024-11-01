@@ -2,7 +2,6 @@ package ar.edu.itba.pod.client.csvParser.CHI;
 
 import ar.edu.itba.pod.client.csvParser.CSVFileParser;
 import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;
-import ar.edu.itba.pod.api.model.Agency;
 import ar.edu.itba.pod.api.model.Infraction;
 import ar.edu.itba.pod.api.model.Ticket;
 
@@ -22,7 +21,7 @@ public class CHICSVParserFactory extends CityCSVParserFactory {
     }
 
     @Override
-    public CSVFileParser<Agency> getAgencyFileParser() {
+    public CSVFileParser<String> getAgencyFileParser() {
         return super.getAgencyFileParser(true, new CHIAgencyLineParser());
     }
 }

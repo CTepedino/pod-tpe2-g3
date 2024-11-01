@@ -1,6 +1,5 @@
 package ar.edu.itba.pod.client.csvParser;
 
-import ar.edu.itba.pod.api.model.Agency;
 import ar.edu.itba.pod.api.model.Infraction;
 import ar.edu.itba.pod.api.model.Ticket;
 
@@ -37,9 +36,9 @@ public abstract class CityCSVParserFactory {
     }
     public abstract CSVFileParser<Infraction> getInfractionFileParser();
 
-    protected CSVFileParser<Agency> getAgencyFileParser(boolean hasHeader, CSVLineParser<Agency> lineParser){
+    protected CSVFileParser<String> getAgencyFileParser(boolean hasHeader, CSVLineParser<String> lineParser){
         return getFileParser(AGENCIES_CSV_FILENAME, hasHeader, lineParser);
     }
-    public abstract CSVFileParser<Agency> getAgencyFileParser();
+    public abstract CSVFileParser<String> getAgencyFileParser();
 
 }

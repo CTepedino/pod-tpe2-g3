@@ -2,7 +2,6 @@ package ar.edu.itba.pod.client.csvParser.NYC;
 
 import ar.edu.itba.pod.client.csvParser.CSVFileParser;
 import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;
-import ar.edu.itba.pod.api.model.Agency;
 import ar.edu.itba.pod.api.model.Infraction;
 import ar.edu.itba.pod.api.model.Ticket;
 
@@ -22,7 +21,7 @@ public class NYCCSVParserFactory extends CityCSVParserFactory {
     }
 
     @Override
-    public CSVFileParser<Agency> getAgencyFileParser() {
+    public CSVFileParser<String> getAgencyFileParser() {
         return super.getAgencyFileParser(true, new NYCAgencyLineParser());
     }
 }

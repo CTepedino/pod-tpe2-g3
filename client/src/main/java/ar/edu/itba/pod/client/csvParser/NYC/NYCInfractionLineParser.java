@@ -5,7 +5,7 @@ import ar.edu.itba.pod.api.model.Infraction;
 
 import java.util.StringTokenizer;
 
-public class NYCInfractionLineParser implements CSVLineParser<Infraction> {
+public class NYCInfractionLineParser extends CSVLineParser<Infraction> {
     private static final String SEPARATOR = ";";
 
 

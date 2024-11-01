@@ -1,12 +1,16 @@
 package ar.edu.itba.pod.client.csvParser;
 
 import java.io.BufferedReader;
-import java.io.Closeable;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-public class CSVFileParser<T> implements Iterator<T>, Closeable {
+public class CSVFileParser<T> {
     private final CSVLineParser<T> lineParser;
     private final BufferedReader reader;
     private String nextLineCache;
@@ -25,8 +29,7 @@ public class CSVFileParser<T> implements Iterator<T>, Closeable {
         this.lineParser = lineParser;
     }
 
-    @Override
-    public void close(){
+    private void close(){
         try {
             reader.close();
         } catch(IOException e){
@@ -34,19 +37,25 @@ public class CSVFileParser<T> implements Iterator<T>, Closeable {
         }
     }
 
-    @Override
-    public boolean hasNext() {
+    private boolean hasNext() {
         return nextLineCache != null;
     }
 
-    @Override
-    public T next() {
+    private String nextLine() {
         String line = nextLineCache;
         try {
             nextLineCache = reader.readLine();
         } catch (IOException e){
             throw new IllegalStateException();
         }
-        return lineParser.parseLine(line);
+        return line;
+    }
+
+
+    public void consumeAll(Consumer<T> consumer){
+        while(hasNext()){
+            lineParser.consume(nextLine(), consumer);
+        }
+        close();
     }
 }

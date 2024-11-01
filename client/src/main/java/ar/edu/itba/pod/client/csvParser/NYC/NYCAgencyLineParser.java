@@ -1,12 +1,13 @@
 package ar.edu.itba.pod.client.csvParser.NYC;
 
 import ar.edu.itba.pod.client.csvParser.CSVLineParser;
-import ar.edu.itba.pod.api.model.Agency;
 
-public class NYCAgencyLineParser implements CSVLineParser<Agency> {
+import java.util.function.Function;
+
+public class NYCAgencyLineParser extends CSVLineParser<String> {
 
     @Override
-    public Agency parseLine(String line){
-        return new Agency(line);
+    public String parseLine(String line){
+        return line;
     }
 }

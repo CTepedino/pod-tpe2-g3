@@ -1,6 +1,6 @@
 package ar.edu.itba.pod.api.query1;
 
-import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
+import ar.edu.itba.pod.api.model.dto.InfractionAgency;
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyTicketCount;
 import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Collator;
@@ -11,7 +11,7 @@ import java.util.TreeSet;
 
 
 @SuppressWarnings("deprecation")
-public class TotalTicketsByInfractionAndAgencyCollator implements Collator<Map.Entry<InfractionAgencyPair, Long>, SortedSet<InfractionAgencyTicketCount>> {
+public class TotalTicketsByInfractionAndAgencyCollator implements Collator<Map.Entry<InfractionAgency, Long>, SortedSet<InfractionAgencyTicketCount>> {
     private final IMap<String, String> infractions;
 
     public TotalTicketsByInfractionAndAgencyCollator(IMap<String, String> infractions){
@@ -19,7 +19,7 @@ public class TotalTicketsByInfractionAndAgencyCollator implements Collator<Map.E
     }
 
     @Override
-    public SortedSet<InfractionAgencyTicketCount> collate(Iterable<Map.Entry<InfractionAgencyPair, Long>> values) {
+    public SortedSet<InfractionAgencyTicketCount> collate(Iterable<Map.Entry<InfractionAgency, Long>> values) {
 
         SortedSet<InfractionAgencyTicketCount> set = new TreeSet<>(
                 (count1, count2) -> {
@@ -37,7 +37,7 @@ public class TotalTicketsByInfractionAndAgencyCollator implements Collator<Map.E
                 }
         );
 
-        for (Map.Entry<InfractionAgencyPair, Long> entry : values){
+        for (Map.Entry<InfractionAgency, Long> entry : values){
             set.add(new InfractionAgencyTicketCount(
                     infractions.get(entry.getKey().getInfractionId()),
                     entry.getKey().getAgency(),

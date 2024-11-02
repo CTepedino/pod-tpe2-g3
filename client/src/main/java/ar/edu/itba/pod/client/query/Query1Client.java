@@ -1,6 +1,6 @@
 package ar.edu.itba.pod.client.query;
 
-import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
+import ar.edu.itba.pod.api.model.dto.InfractionAgency;
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyTicketCount;
 import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
 import com.hazelcast.core.ICompletableFuture;
@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings("deprecation")
-public class Query1Client extends QueryClient<Long, InfractionAgencyPair> {
+public class Query1Client extends QueryClient<Long, InfractionAgency> {
     private static final String JOB_TRACKER_NAME = GROUP_NAME + "-ticket-count";
     private static final String[] OUT_CSV_HEADERS = {"Infraction", "Agency", "Tickets"};
     private static final String OUT_CSV_FILENAME = "/query1.csv";
@@ -31,23 +31,23 @@ public class Query1Client extends QueryClient<Long, InfractionAgencyPair> {
     }
 
     @Override
-    public KeyValueSource<Long, InfractionAgencyPair> loadData(){
+    public KeyValueSource<Long, InfractionAgency> loadData(){
         fillAgencyList();
         fillInfractionsMap();
         AtomicLong incrementalKey = new AtomicLong();
-        IMap<Long, InfractionAgencyPair> tickets = hazelcastInstance.getMap(TICKET_MAP);
+        IMap<Long, InfractionAgency> tickets = hazelcastInstance.getMap(TICKET_MAP);
         tickets.clear();
         csvParserFactory.getTicketFileParser().consumeAll( t ->
-                tickets.put(incrementalKey.incrementAndGet(), new InfractionAgencyPair(t.getIssuingAgency(), t.getInfractionId()))
+                tickets.put(incrementalKey.incrementAndGet(), new InfractionAgency(t.getIssuingAgency(), t.getInfractionId()))
         );
         return KeyValueSource.fromMap(tickets);
     }
 
     @Override
-    public void mapReduceJob(KeyValueSource<Long, InfractionAgencyPair> keyValueSource) throws ExecutionException, InterruptedException{
+    public void mapReduceJob(KeyValueSource<Long, InfractionAgency> keyValueSource) throws ExecutionException, InterruptedException{
 
         JobTracker jobTracker = hazelcastInstance.getJobTracker(JOB_TRACKER_NAME);
-        Job<Long, InfractionAgencyPair> job = jobTracker.newJob(keyValueSource);
+        Job<Long, InfractionAgency> job = jobTracker.newJob(keyValueSource);
         ICompletableFuture<SortedSet<InfractionAgencyTicketCount>> future = job
                 .mapper(new TotalTicketsByInfractionAndAgencyMapper(
                         new HashMap<>(hazelcastInstance.getMap(INFRACTION_MAP)),

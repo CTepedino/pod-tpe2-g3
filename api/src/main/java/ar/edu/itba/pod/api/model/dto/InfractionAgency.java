@@ -7,13 +7,13 @@ import com.hazelcast.nio.serialization.DataSerializable;
 import java.io.IOException;
 import java.util.Objects;
 
-public class InfractionAgencyPair implements DataSerializable {
+public class InfractionAgency implements DataSerializable {
     private String agency;
     private String infractionId;
 
-    public InfractionAgencyPair(){}
+    public InfractionAgency(){}
 
-    public InfractionAgencyPair(String agency, String infractionId) {
+    public InfractionAgency(String agency, String infractionId) {
         this.agency = agency;
         this.infractionId = infractionId;
     }
@@ -41,7 +41,7 @@ public class InfractionAgencyPair implements DataSerializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof InfractionAgencyPair that)) return false;
+        if (!(o instanceof InfractionAgency that)) return false;
         return Objects.equals(agency, that.agency) && Objects.equals(infractionId, that.infractionId);
     }
 

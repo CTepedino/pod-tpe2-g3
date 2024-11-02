@@ -11,7 +11,7 @@ public class Ticket implements DataSerializable {
 
     private String plate;
     private String infractionId;
-    private double fineAmount;
+    private double fineAmount; //TODO: reemplazar con int?
     private String issuingAgency;
     private LocalDate issueDate;
     private String countyName;

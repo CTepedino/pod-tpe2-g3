@@ -1,61 +1,47 @@
 package ar.edu.itba.pod.client.query;
 
 import ar.edu.itba.pod.api.model.Ticket;
-import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;
 import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
-import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.KeyValueSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.Job;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings("deprecation")
-public class Query2Client {
+public class Query2Client extends QueryClient<Long, Ticket> {
+    private static final String JOB_TRACKER_NAME = GROUP_NAME + "-agency-ytd";
+    private static final String[] OUT_CSV_HEADERS = {};
+    private static final String OUT_CSV_FILENAME = "/query2.csv";
+    private static final String OUT_TIME_FILENAME = "/time2.txt";
 
-    private static final Logger logger = LoggerFactory.getLogger(Query2Client.class);
+    public Query2Client() {
+        super(new QueryPropertiesFactory().build(), OUT_TIME_FILENAME);
+    }
 
-    public static void main(String[] args) throws InterruptedException, IOException, ExecutionException {
+    @Override
+    public KeyValueSource<Long, Ticket> loadData(){
+        fillAgencyList();
+        AtomicLong incrementalKey = new AtomicLong();
+        IMap<Long, Ticket> tickets = hazelcastInstance.getMap(TICKET_MAP);
+        tickets.clear();
+        csvParserFactory.getTicketFileParser().consumeAll( t ->
+                tickets.put(incrementalKey.incrementAndGet(), t)
+        );
+        return KeyValueSource.fromMap(tickets);
+    }
 
-        logger.info("Query2 Client starting...");
+    @Override
+    public void mapReduceJob(KeyValueSource<Long, Ticket> keyValueSource) throws ExecutionException, InterruptedException{
 
-        QueryPropertiesFactory.QueryProperties properties = new QueryPropertiesFactory().build();
+        JobTracker jobTracker = hazelcastInstance.getJobTracker(JOB_TRACKER_NAME);
+        Job<Long, Ticket> job = jobTracker.newJob(keyValueSource);
+    }
 
-        try {
-            //TODO: cambialo para extienda QueryClient, asi no hay tanto codigo repetido
-            HazelcastInstance hazelcastInstance = null;//ClientUtils.startHazelcast(properties.getAddresses());
-
-            CityCSVParserFactory parserFactory = properties.getCity().getParser(properties.getInPath());
-
-            IList<String> agencies = hazelcastInstance.getList("g3-agencies");
-            agencies.clear();
-            parserFactory.getAgencyFileParser().consumeAll(agencies::add);
-
-            AtomicLong incrementalKey = new AtomicLong();
-            IMap<Long, Ticket> tickets = hazelcastInstance.getMap("g3-tickets");
-            tickets.clear();
-            parserFactory.getTicketFileParser().consumeAll( t ->
-                    tickets.putIfAbsent(incrementalKey.incrementAndGet(), t)
-            );
-
-            KeyValueSource<Long, Ticket> ticketsKeyValueSource = KeyValueSource.fromMap(tickets);
-
-            JobTracker jobTracker = hazelcastInstance.getJobTracker("g3-agency-ytd");
-            Job<Long, Ticket> job = jobTracker.newJob(ticketsKeyValueSource);
-
-
-
-        } finally {
-            HazelcastClient.shutdownAll();
-        }
-
+    public static void main(String[] args) {
+        new Query2Client().executeQuery();
     }
 
 }

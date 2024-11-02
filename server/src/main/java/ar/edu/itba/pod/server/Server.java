@@ -39,6 +39,7 @@ public class Server {
                 .setEnabled(false);
         config.setManagementCenterConfig(managementCenterConfig);
 
+        //TODO: para paralelizar la lectura de CSVs
 /*        ExecutorConfig executorConfig = new ExecutorConfig()
                 .setName("g3-executor")
                 .setPoolSize(16)

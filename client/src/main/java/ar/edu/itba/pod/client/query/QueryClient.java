@@ -4,6 +4,7 @@ import ar.edu.itba.pod.api.model.CSVPrintable;
 import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;
 import ar.edu.itba.pod.client.util.CSVPrinter;
 import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
+import ar.edu.itba.pod.client.util.QueryTimer;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.crypto.dsig.keyinfo.KeyValue;
+import java.io.IOException;
 import java.security.Key;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -31,14 +33,17 @@ public abstract class QueryClient<KeyIn, ValueIn>{
     protected static final String INFRACTION_MAP = GROUP_NAME + "-infractions";
     protected static final String TICKET_MAP = GROUP_NAME + "-tickets";
 
+    private final QueryTimer queryTimer;
+
     final HazelcastInstance hazelcastInstance;
     final QueryPropertiesFactory.QueryProperties properties;
     final CityCSVParserFactory csvParserFactory;
 
-    QueryClient(QueryPropertiesFactory.QueryProperties properties){
+    QueryClient(QueryPropertiesFactory.QueryProperties properties, String timeFileName){
         this.properties = properties;
         hazelcastInstance = startHazelcast(properties.getAddresses());
         csvParserFactory = properties.getCity().getParser(properties.getInPath());
+        queryTimer = new QueryTimer(properties.getOutPath() + timeFileName);
     }
 
     private HazelcastInstance startHazelcast(List<String> addresses){
@@ -74,13 +79,22 @@ public abstract class QueryClient<KeyIn, ValueIn>{
         printer.print(properties.getOutPath() + fileName, results);
     }
 
-    public void executeQuery(){//TODO: timers
-        try {
-            KeyValueSource<KeyIn, ValueIn> keyValueSource = loadData();
+    public void executeQuery(){
 
+        try {
+
+            queryTimer.startLoad();
+            KeyValueSource<KeyIn, ValueIn> keyValueSource = loadData();
+            queryTimer.endLoad();
+
+            queryTimer.startJob();
             mapReduceJob(keyValueSource);
+            queryTimer.endJob();
+
         } catch (ExecutionException | InterruptedException e){
-            logger.error("Hazelcast error {}", e.getMessage());
+            logger.error("Hazelcast error: {}", e.getMessage());
+        } catch (IOException e){
+            logger.error("Error writing time file: {}", e.getMessage());
         } finally {
             HazelcastClient.shutdownAll();
         }

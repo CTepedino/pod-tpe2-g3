@@ -22,9 +22,10 @@ public class Query1Client extends QueryClient<Long, InfractionAgencyPair> {
     private static final String JOB_TRACKER_NAME = GROUP_NAME + "-ticket-count";
     private static final String[] OUT_CSV_HEADERS = {"Infraction", "Agency", "Tickets"};
     private static final String OUT_CSV_FILENAME = "/query1.csv";
+    private static final String OUT_TIME_FILENAME = "/time1.txt";
 
     public Query1Client() {
-        super(new QueryPropertiesFactory().build());
+        super(new QueryPropertiesFactory().build(), OUT_TIME_FILENAME);
     }
 
     @Override

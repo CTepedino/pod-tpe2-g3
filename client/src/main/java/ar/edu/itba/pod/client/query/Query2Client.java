@@ -30,7 +30,7 @@ public class Query2Client {
 
         try {
             //TODO: cambialo para extienda QueryClient, asi no hay tanto codigo repetido
-            HazelcastInstance hazelcastInstance = ClientUtils.startHazelcast(properties.getAddresses());
+            HazelcastInstance hazelcastInstance = null;//ClientUtils.startHazelcast(properties.getAddresses());
 
             CityCSVParserFactory parserFactory = properties.getCity().getParser(properties.getInPath());
 

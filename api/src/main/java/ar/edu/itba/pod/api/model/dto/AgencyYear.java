@@ -42,7 +42,7 @@ public class AgencyYear implements DataSerializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AgencyYear that)) return false;
-        return Objects.equals(agency, that.agency) && Objects.equals(year, that.year);
+        return agency.equals(that.agency) && year == that.year;
     }
 
     @Override

@@ -15,11 +15,12 @@ public class YTDByAgencyMapper implements Mapper<Long, Ticket, AgencyYearPair, D
     @Override
     public void map(Long key, Ticket value, Context<AgencyYearPair, Double[]> context) {
         var agencies = hazelcastInstance.getList("g3-agencies");
-        Double[] monthlyAmount = new Double[12];
+        Double[] monthAndAmount = new Double[2];
 
         if(agencies.contains(value.getIssuingAgency())){
-            monthlyAmount[value.getIssueDate().getMonthValue() - 1] = value.getFineAmount();
-            context.emit(new AgencyYearPair(value.getIssuingAgency(), value.getIssueDate().getYear()), monthlyAmount);
+            monthAndAmount[0] = (double) value.getIssueDate().getMonthValue() - 1;
+            monthAndAmount[1] = value.getFineAmount();
+            context.emit(new AgencyYearPair(value.getIssuingAgency(), value.getIssueDate().getYear()), monthAndAmount);
         }
     }
 

@@ -16,10 +16,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings("deprecation")
 public class Query1AlternativeClient extends QueryClient<Long, InfractionAgencyPair> {
-    private static final String JOB_TRACKER_NAME = GROUP_NAME + "-ticket-count";
+    private static final String JOB_TRACKER_NAME = GROUP_NAME + "-ticket-count-a";
     private static final String[] OUT_CSV_HEADERS = {"Infraction", "Agency", "Tickets"};
-    private static final String OUT_CSV_FILENAME = "/query1.csv";
-    private static final String OUT_TIME_FILENAME = "/time1.txt";
+    private static final String OUT_CSV_FILENAME = "/query1a.csv";
+    private static final String OUT_TIME_FILENAME = "/time1a.txt";
 
     public Query1AlternativeClient() {
         super(new QueryPropertiesFactory().build(), OUT_TIME_FILENAME);

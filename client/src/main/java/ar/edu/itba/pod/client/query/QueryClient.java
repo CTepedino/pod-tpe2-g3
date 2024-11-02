@@ -10,15 +10,13 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.config.GroupConfig;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
+import com.hazelcast.core.ISet;
 import com.hazelcast.mapreduce.KeyValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.io.IOException;
-import java.security.Key;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -29,7 +27,7 @@ public abstract class QueryClient<KeyIn, ValueIn>{
     static final String GROUP_NAME = "g3";
     private static final String GROUP_PASS = GROUP_NAME + "-pass";
 
-    protected static final String AGENCY_LIST = GROUP_NAME + "-agencies";
+    protected static final String AGENCY_SET = GROUP_NAME + "-agencies";
     protected static final String INFRACTION_MAP = GROUP_NAME + "-infractions";
     protected static final String TICKET_MAP = GROUP_NAME + "-tickets";
 
@@ -58,7 +56,7 @@ public abstract class QueryClient<KeyIn, ValueIn>{
     }
 
     void fillAgencyList(){
-        IList<String> agencies = hazelcastInstance.getList(AGENCY_LIST);
+        ISet<String> agencies = hazelcastInstance.getSet(AGENCY_SET);
         agencies.clear();
         csvParserFactory.getAgencyFileParser().consumeAll(agencies::add);
     }

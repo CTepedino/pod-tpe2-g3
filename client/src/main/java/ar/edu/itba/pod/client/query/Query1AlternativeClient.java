@@ -2,31 +2,29 @@ package ar.edu.itba.pod.client.query;
 
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyTicketCount;
+import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyCollator;
+import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyCombinerFactory;
+import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyMapperAlternative;
+import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyReducerFactory;
 import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
 import com.hazelcast.core.ICompletableFuture;
 import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
-import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyCollator;
-import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyCombinerFactory;
-import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyMapper;
-import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyReducerFactory;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings("deprecation")
-public class Query1Client extends QueryClient<Long, InfractionAgencyPair> {
-    private static final String JOB_TRACKER_NAME = GROUP_NAME + "-ticket-count";
+public class Query1AlternativeClient extends QueryClient<Long, InfractionAgencyPair> {
+    private static final String JOB_TRACKER_NAME = GROUP_NAME + "-ticket-count-a";
     private static final String[] OUT_CSV_HEADERS = {"Infraction", "Agency", "Tickets"};
-    private static final String OUT_CSV_FILENAME = "/query1.csv";
-    private static final String OUT_TIME_FILENAME = "/time1.txt";
+    private static final String OUT_CSV_FILENAME = "/query1a.csv";
+    private static final String OUT_TIME_FILENAME = "/time1a.txt";
 
-    public Query1Client() {
+    public Query1AlternativeClient() {
         super(new QueryPropertiesFactory().build(), OUT_TIME_FILENAME);
     }
 
@@ -49,14 +47,14 @@ public class Query1Client extends QueryClient<Long, InfractionAgencyPair> {
         JobTracker jobTracker = hazelcastInstance.getJobTracker(JOB_TRACKER_NAME);
         Job<Long, InfractionAgencyPair> job = jobTracker.newJob(keyValueSource);
         ICompletableFuture<SortedSet<InfractionAgencyTicketCount>> future = job
-                .mapper(new TotalTicketsByInfractionAndAgencyMapper(
-                        new HashMap<>(hazelcastInstance.getMap(INFRACTION_MAP)),
-                        new HashSet<>(hazelcastInstance.getSet(AGENCY_SET))))
+                .mapper(new TotalTicketsByInfractionAndAgencyMapperAlternative(INFRACTION_MAP, AGENCY_SET))
                 .combiner(new TotalTicketsByInfractionAndAgencyCombinerFactory())
                 .reducer(new TotalTicketsByInfractionAndAgencyReducerFactory())
                 .submit(new TotalTicketsByInfractionAndAgencyCollator(hazelcastInstance.getMap(INFRACTION_MAP)));
 
+
         SortedSet<InfractionAgencyTicketCount> set = future.get();
+
         printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, set);
     }
 

@@ -1,4 +1,4 @@
-package query2;
+package ar.edu.itba.pod.api.query2;
 
 import ar.edu.itba.pod.api.model.Ticket;
 import ar.edu.itba.pod.api.model.dto.AgencyYearPair;

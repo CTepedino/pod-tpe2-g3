@@ -1,4 +1,4 @@
-package query1;
+package ar.edu.itba.pod.api.query1;
 
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
 import com.hazelcast.mapreduce.Reducer;

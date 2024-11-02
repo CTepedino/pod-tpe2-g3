@@ -24,16 +24,17 @@ public class CSVPrinter {
 
     public void print(String outPath, Iterable<? extends CSVPrintable> records){
         try (FileWriter writer = new FileWriter(outPath, false)){
-            for (String column : columns){
-                writer.write(column);
+
+            for (int i = 0 ; i < columns.length -1; i++){
+                writer.write(columns[i]);
                 writer.write(separator);
             }
-            writer.write('\n');
+            writer.write(columns[columns.length-1] + '\n');
+
             for (CSVPrintable record : records) {
                 writer.write(record.printAsCSV(separator));
                 writer.write('\n');
             }
-            writer.close();
         } catch (IOException e){
             logger.error("Can't write to file {}", outPath);
             throw new IllegalStateException();

@@ -1,39 +1,30 @@
 package query1;
 
-import ar.edu.itba.pod.api.model.Infraction;
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.HazelcastInstanceAware;
-import com.hazelcast.core.IList;
-import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Context;
 import com.hazelcast.mapreduce.Mapper;
 
+import java.util.Map;
+import java.util.Set;
+
 @SuppressWarnings("deprecation")
-public class TotalTicketsByInfractionAndAgencyMapper implements Mapper<Long, InfractionAgencyPair, InfractionAgencyPair, Long>, HazelcastInstanceAware {
+public class TotalTicketsByInfractionAndAgencyMapper implements Mapper<Long, InfractionAgencyPair, InfractionAgencyPair, Long> {
     private static final Long ONE = 1L;
-    private transient HazelcastInstance hazelcastInstance;
 
-    private final String infractionMapName;
-    private final String agencyListName;
+    private final Map<String, String> infractionMap;
+    private final Set<String> agencySet;
 
-    public TotalTicketsByInfractionAndAgencyMapper(String infractionMapName, String agencyListName){
-        this.infractionMapName = infractionMapName;
-        this.agencyListName = agencyListName;
+
+    public TotalTicketsByInfractionAndAgencyMapper(Map<String, String> infractionMap, Set<String> agencySet){
+        this.infractionMap = infractionMap;
+        this.agencySet = agencySet;
     }
 
     @Override
     public void map(Long key, InfractionAgencyPair value, Context<InfractionAgencyPair, Long> context) {
-        var infractions = hazelcastInstance.getMap(infractionMapName);
-        var agencies = hazelcastInstance.getList(agencyListName);
-
-        if (infractions.containsKey(value.getInfractionId()) && agencies.contains(value.getAgency())) {
+        if (infractionMap.containsKey(value.getInfractionId()) && agencySet.contains(value.getAgency())) {
             context.emit(value, ONE);
         }
     }
 
-    @Override
-    public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
-        this.hazelcastInstance = hazelcastInstance;
-    }
 }

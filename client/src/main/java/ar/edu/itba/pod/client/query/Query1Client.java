@@ -13,6 +13,8 @@ import query1.TotalTicketsByInfractionAndAgencyCombinerFactory;
 import query1.TotalTicketsByInfractionAndAgencyMapper;
 import query1.TotalTicketsByInfractionAndAgencyReducerFactory;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
@@ -47,14 +49,14 @@ public class Query1Client extends QueryClient<Long, InfractionAgencyPair> {
         JobTracker jobTracker = hazelcastInstance.getJobTracker(JOB_TRACKER_NAME);
         Job<Long, InfractionAgencyPair> job = jobTracker.newJob(keyValueSource);
         ICompletableFuture<SortedSet<InfractionAgencyTicketCount>> future = job
-                .mapper(new TotalTicketsByInfractionAndAgencyMapper(INFRACTION_MAP, AGENCY_LIST))
+                .mapper(new TotalTicketsByInfractionAndAgencyMapper(
+                        new HashMap<>(hazelcastInstance.getMap(INFRACTION_MAP)),
+                        new HashSet<>(hazelcastInstance.getSet(AGENCY_SET))))
                 .combiner(new TotalTicketsByInfractionAndAgencyCombinerFactory())
                 .reducer(new TotalTicketsByInfractionAndAgencyReducerFactory())
                 .submit(new TotalTicketsByInfractionAndAgencyCollator(hazelcastInstance.getMap(INFRACTION_MAP)));
 
-
         SortedSet<InfractionAgencyTicketCount> set = future.get();
-
         printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, set);
     }
 

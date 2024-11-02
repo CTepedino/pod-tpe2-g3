@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.api.model.dto;
 
+import ar.edu.itba.pod.api.model.CSVPrintable;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;
@@ -7,7 +8,7 @@ import com.hazelcast.nio.serialization.DataSerializable;
 import java.io.IOException;
 import java.util.Objects;
 
-public class InfractionAgencyTicketCount implements DataSerializable {
+public class InfractionAgencyTicketCount implements DataSerializable, CSVPrintable {
     private String infraction;
     private String agency;
     private long ticketCount;
@@ -59,8 +60,7 @@ public class InfractionAgencyTicketCount implements DataSerializable {
     }
 
     @Override
-    public String toString(){
-        return infraction+';'+agency+';'+ticketCount;
+    public String printAsCSV(char separator) {
+        return infraction + separator + agency + separator + ticketCount;
     }
-
 }

@@ -69,7 +69,8 @@ public class Query1Client{
 
             SortedSet<InfractionAgencyTicketCount> set = future.get();
 
-            set.forEach(System.out::println);
+            CSVPrinter printer = new CSVPrinter(new String[]{"Infraction", "Agency", "Tickets"}, ';');
+            printer.print(properties.getOutPath() + "/query1.csv", set);
 
 
         } finally {

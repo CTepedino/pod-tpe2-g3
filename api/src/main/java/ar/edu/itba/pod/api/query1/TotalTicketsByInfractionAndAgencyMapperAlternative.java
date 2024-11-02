@@ -1,8 +1,7 @@
 package ar.edu.itba.pod.api.query1;
 
 import ar.edu.itba.pod.api.model.dto.InfractionAgency;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.HazelcastInstanceAware;
+import com.hazelcast.core.*;
 import com.hazelcast.mapreduce.Context;
 import com.hazelcast.mapreduce.Mapper;
 
@@ -12,19 +11,24 @@ public class TotalTicketsByInfractionAndAgencyMapperAlternative implements Mappe
     private transient HazelcastInstance hazelcastInstance;
 
     private final String infractionMapName;
-    private final String agencyListName;
+    private final String agencySetName;
 
-    public TotalTicketsByInfractionAndAgencyMapperAlternative(String infractionMapName, String agencyListName){
+    private IMap<String, String> infractionMap;
+    private ISet<String> agencySet;
+
+    public TotalTicketsByInfractionAndAgencyMapperAlternative(String infractionMapName, String agencySetName){
         this.infractionMapName = infractionMapName;
-        this.agencyListName = agencyListName;
+        this.agencySetName = agencySetName;
     }
 
     @Override
     public void map(Long key, InfractionAgency value, Context<InfractionAgency, Long> context) {
-        var infractions = hazelcastInstance.getMap(infractionMapName);
-        var agencies = hazelcastInstance.getSet(agencyListName);
+        if (infractionMap == null || agencySet == null) {
+            infractionMap = hazelcastInstance.getMap(infractionMapName);
+            agencySet = hazelcastInstance.getSet(agencySetName);
+        }
 
-        if (infractions.containsKey(value.getInfractionId()) && agencies.contains(value.getAgency())) {
+        if (infractionMap.containsKey(value.getInfractionId()) && agencySet.contains(value.getAgency())) {
             context.emit(value, ONE);
         }
     }
@@ -33,4 +37,5 @@ public class TotalTicketsByInfractionAndAgencyMapperAlternative implements Mappe
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
     }
+
 }

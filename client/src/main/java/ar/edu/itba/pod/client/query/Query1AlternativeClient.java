@@ -59,6 +59,6 @@ public class Query1AlternativeClient extends QueryClient<Long, InfractionAgency>
     }
 
     public static void main(String[] args){
-        new Query1Client().executeQuery();
+        new Query1AlternativeClient().executeQuery();
     }
 }

@@ -1,13 +1,13 @@
 package ar.edu.itba.pod.api.query1;
 
-import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
+import ar.edu.itba.pod.api.model.dto.InfractionAgency;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.mapreduce.Context;
 import com.hazelcast.mapreduce.Mapper;
 
 @SuppressWarnings("deprecation")
-public class TotalTicketsByInfractionAndAgencyMapperAlternative implements Mapper<Long, InfractionAgencyPair, InfractionAgencyPair, Long>, HazelcastInstanceAware {
+public class TotalTicketsByInfractionAndAgencyMapperAlternative implements Mapper<Long, InfractionAgency, InfractionAgency, Long>, HazelcastInstanceAware {
     private static final Long ONE = 1L;
     private transient HazelcastInstance hazelcastInstance;
 
@@ -20,7 +20,7 @@ public class TotalTicketsByInfractionAndAgencyMapperAlternative implements Mappe
     }
 
     @Override
-    public void map(Long key, InfractionAgencyPair value, Context<InfractionAgencyPair, Long> context) {
+    public void map(Long key, InfractionAgency value, Context<InfractionAgency, Long> context) {
         var infractions = hazelcastInstance.getMap(infractionMapName);
         var agencies = hazelcastInstance.getSet(agencyListName);
 

@@ -1,13 +1,13 @@
 package ar.edu.itba.pod.api.query1;
 
-import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
+import ar.edu.itba.pod.api.model.dto.InfractionAgency;
 import com.hazelcast.mapreduce.Combiner;
 import com.hazelcast.mapreduce.CombinerFactory;
 
 @SuppressWarnings("deprecation")
-public class TotalTicketsByInfractionAndAgencyCombinerFactory implements CombinerFactory<InfractionAgencyPair, Long, Long> {
+public class TotalTicketsByInfractionAndAgencyCombinerFactory implements CombinerFactory<InfractionAgency, Long, Long> {
     @Override
-    public Combiner<Long, Long> newCombiner(InfractionAgencyPair infractionAgencyPair) {
+    public Combiner<Long, Long> newCombiner(InfractionAgency infractionAgency) {
         return new TotalTicketsByInfractionAndAgencyCombiner();
     }
 

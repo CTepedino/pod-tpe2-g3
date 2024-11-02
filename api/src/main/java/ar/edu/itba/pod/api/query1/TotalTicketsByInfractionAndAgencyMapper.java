@@ -1,6 +1,6 @@
 package ar.edu.itba.pod.api.query1;
 
-import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
+import ar.edu.itba.pod.api.model.dto.InfractionAgency;
 import com.hazelcast.mapreduce.Context;
 import com.hazelcast.mapreduce.Mapper;
 
@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 @SuppressWarnings("deprecation")
-public class TotalTicketsByInfractionAndAgencyMapper implements Mapper<Long, InfractionAgencyPair, InfractionAgencyPair, Long> {
+public class TotalTicketsByInfractionAndAgencyMapper implements Mapper<Long, InfractionAgency, InfractionAgency, Long> {
     private static final Long ONE = 1L;
 
     private final Map<String, String> infractionMap;
@@ -21,7 +21,7 @@ public class TotalTicketsByInfractionAndAgencyMapper implements Mapper<Long, Inf
     }
 
     @Override
-    public void map(Long key, InfractionAgencyPair value, Context<InfractionAgencyPair, Long> context) {
+    public void map(Long key, InfractionAgency value, Context<InfractionAgency, Long> context) {
         if (infractionMap.containsKey(value.getInfractionId()) && agencySet.contains(value.getAgency())) {
             context.emit(value, ONE);
         }

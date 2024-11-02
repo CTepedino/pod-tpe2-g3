@@ -1,13 +1,13 @@
 package ar.edu.itba.pod.api.query1;
 
-import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
+import ar.edu.itba.pod.api.model.dto.InfractionAgency;
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
 
 @SuppressWarnings("deprecation")
-public class TotalTicketsByInfractionAndAgencyReducerFactory implements ReducerFactory<InfractionAgencyPair, Long, Long> {
+public class TotalTicketsByInfractionAndAgencyReducerFactory implements ReducerFactory<InfractionAgency, Long, Long> {
     @Override
-    public Reducer<Long, Long> newReducer(InfractionAgencyPair infractionAgencyPair) {
+    public Reducer<Long, Long> newReducer(InfractionAgency infractionAgency) {
         return new TotalTicketsByInfractionAndAgencyReducer();
     }
 

@@ -58,4 +58,9 @@ public class InfractionAgencyTicketCount implements DataSerializable {
         return Objects.hash(infraction, agency, ticketCount);
     }
 
+    @Override
+    public String toString(){
+        return infraction+';'+agency+';'+ticketCount;
+    }
+
 }

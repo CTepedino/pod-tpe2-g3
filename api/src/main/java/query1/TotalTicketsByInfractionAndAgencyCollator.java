@@ -4,6 +4,7 @@ import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyTicketCount;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastInstanceAware;
+import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Collator;
 
 import java.util.Comparator;
@@ -13,16 +14,19 @@ import java.util.TreeSet;
 
 
 @SuppressWarnings("deprecation")
-public class TotalTicketsByInfractionAndAgencyCollator implements Collator<Map.Entry<InfractionAgencyPair, Long>, SortedSet<InfractionAgencyTicketCount>>, HazelcastInstanceAware {
-    private transient HazelcastInstance hazelcastInstance;
+public class TotalTicketsByInfractionAndAgencyCollator implements Collator<Map.Entry<InfractionAgencyPair, Long>, SortedSet<InfractionAgencyTicketCount>> {
+    private final IMap<String, String> infractions;
+
+    public TotalTicketsByInfractionAndAgencyCollator(IMap<String, String> infractions){
+        this.infractions = infractions;
+    }
 
     @Override
     public SortedSet<InfractionAgencyTicketCount> collate(Iterable<Map.Entry<InfractionAgencyPair, Long>> values) {
-        Map<String, String> infractions = hazelcastInstance.getMap("g3-infractions");
 
         SortedSet<InfractionAgencyTicketCount> set = new TreeSet<>(
                 (count1, count2) -> {
-                    if (count1.getTicketCount() > count2.getTicketCount()) {
+                    if (count1.getTicketCount() < count2.getTicketCount()) {
                         return 1;
                     } else if (count1.getTicketCount() == count2.getTicketCount()) {
                         int c;
@@ -47,8 +51,4 @@ public class TotalTicketsByInfractionAndAgencyCollator implements Collator<Map.E
         return set;
     }
 
-    @Override
-    public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
-        this.hazelcastInstance = hazelcastInstance;
-    }
 }

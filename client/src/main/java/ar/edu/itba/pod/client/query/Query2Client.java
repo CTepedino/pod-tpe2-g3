@@ -48,7 +48,8 @@ public class Query2Client extends QueryClient<Long, AgencyDateFine> {
         JobTracker jobTracker = hazelcastInstance.getJobTracker(JOB_TRACKER_NAME);
         Job<Long, AgencyDateFine> job = jobTracker.newJob(keyValueSource);
         ICompletableFuture<SortedSet<AgencyYearMonthYTD>> future = job
-                .mapper(new YTDByAgencyMapper(new HashSet<>(hazelcastInstance.getSet(AGENCY_SET))))
+                .mapper(new YTDByAgencyMapper(
+                        new HashSet<>(hazelcastInstance.getSet(AGENCY_SET))))
                 .combiner(new YTDByAgencyCombinerFactory())
                 .reducer(new YTDByAgencyReducerFactory())
                 .submit(new YTDByAgencyCollator());

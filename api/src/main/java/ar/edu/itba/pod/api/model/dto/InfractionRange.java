@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.api.model.dto;
 
+import ar.edu.itba.pod.api.model.CSVPrintable;
 import ar.edu.itba.pod.api.model.Range;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
@@ -8,7 +9,7 @@ import com.hazelcast.nio.serialization.DataSerializable;
 import java.io.IOException;
 import java.util.Objects;
 
-public class InfractionRange implements DataSerializable {
+public class InfractionRange implements DataSerializable, CSVPrintable {
     private String infractionDescription;
     private Range range;
 
@@ -49,5 +50,10 @@ public class InfractionRange implements DataSerializable {
     public void readData(ObjectDataInput in) throws IOException {
         infractionDescription = in.readUTF();
         range = in.readObject();
+    }
+
+    @Override
+    public String printAsCSV(char separator) {
+        return infractionDescription + separator + getRange().getValueMin() + separator + getRange().getValueMax() + separator + getRange().getDifference();
     }
 }

@@ -1,4 +1,4 @@
-package ar.edu.itba.pod.client.query;
+package ar.edu.itba.pod.client.util;
 
 import ar.edu.itba.pod.api.model.CSVPrintable;
 import org.slf4j.Logger;
@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 
 public class CSVPrinter {
     private static final Logger logger = LoggerFactory.getLogger(CSVPrinter.class);
@@ -17,6 +16,10 @@ public class CSVPrinter {
     public CSVPrinter(String[] columns, char separator){
         this.columns = columns;
         this.separator = separator;
+    }
+
+    public CSVPrinter(String[] columns){
+        this(columns, ';');
     }
 
     public void print(String outPath, Iterable<? extends CSVPrintable> records){

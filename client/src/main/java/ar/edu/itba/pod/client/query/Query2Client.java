@@ -2,6 +2,7 @@ package ar.edu.itba.pod.client.query;
 
 import ar.edu.itba.pod.api.model.Ticket;
 import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;
+import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
@@ -25,9 +26,10 @@ public class Query2Client {
 
         logger.info("Query2 Client starting...");
 
-        QueryPropertiesParserFactory.QueryPropertiesParser properties = new QueryPropertiesParserFactory().build();
+        QueryPropertiesFactory.QueryProperties properties = new QueryPropertiesFactory().build();
 
         try {
+            //TODO: cambialo para extienda QueryClient, asi no hay tanto codigo repetido
             HazelcastInstance hazelcastInstance = ClientUtils.startHazelcast(properties.getAddresses());
 
             CityCSVParserFactory parserFactory = properties.getCity().getParser(properties.getInPath());

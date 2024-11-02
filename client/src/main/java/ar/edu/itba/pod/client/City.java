@@ -1,4 +1,4 @@
-package ar.edu.itba.pod.client.query;
+package ar.edu.itba.pod.client;
 
 import ar.edu.itba.pod.client.csvParser.CHI.CHICSVParserFactory;
 import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;

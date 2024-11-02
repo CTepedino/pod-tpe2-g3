@@ -5,30 +5,32 @@ import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
 
 @SuppressWarnings("deprecation")
-public class TopNInfractionsByFineRangeReducerFactory implements ReducerFactory<String, Double, Range> {
+public class TopNInfractionsByFineRangeReducerFactory implements ReducerFactory<String, Range, Range> {
     @Override
-    public Reducer<Double, Range> newReducer(String key) {
+    public Reducer<Range, Range> newReducer(String key) {
         return new TopNInfractionsByFineRangeReducer();
     }
 
-    private static class TopNInfractionsByFineRangeReducer extends Reducer<Double, Range> {
-        private double min = 0;
-        private double max = 0;
-
+    private static class TopNInfractionsByFineRangeReducer extends Reducer<Range, Range> {
+        Range greatestRange;
 
         @Override
-        public void reduce(Double fine) {
-            if (Double.compare(fine, min) < 0){
-                min = fine;
-            }
-            if (Double.compare(fine, max) > 0){
-                max = fine;
+        public void reduce(Range range) {
+            if (greatestRange == null){
+                greatestRange = range;
+            } else {
+                if (Double.compare(range.getValueMin(), greatestRange.getValueMin()) < 0){
+                    greatestRange.setValueMin(range.getValueMin());
+                }
+                if (Double.compare(range.getValueMax(), greatestRange.getValueMax()) > 0){
+                    greatestRange.setValueMax(range.getValueMax());
+                }
             }
         }
 
         @Override
         public Range finalizeReduce() {
-            return new Range(min, max);
+            return greatestRange;
         }
     }
 }

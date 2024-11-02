@@ -26,6 +26,14 @@ public class Range implements DataSerializable {
         return valueMax;
     }
 
+    public void setValueMin(double valueMin) {
+        this.valueMin = valueMin;
+    }
+
+    public void setValueMax(double valueMax) {
+        this.valueMax = valueMax;
+    }
+
     public double getRange(){
         return valueMax - valueMin;
     }

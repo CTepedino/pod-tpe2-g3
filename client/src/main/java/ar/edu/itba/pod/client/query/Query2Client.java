@@ -1,7 +1,6 @@
 package ar.edu.itba.pod.client.query;
 
 import ar.edu.itba.pod.api.model.Ticket;
-import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
 import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
@@ -14,7 +13,6 @@ import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.Job;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 

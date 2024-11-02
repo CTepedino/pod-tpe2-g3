@@ -16,7 +16,7 @@ public class NYCTicketLineParser extends CSVLineParser<Ticket> {
         StringTokenizer tokenizer = new StringTokenizer(line, SEPARATOR);
         String plate = tokenizer.nextToken();
         String id = tokenizer.nextToken();
-        double amount = Double.parseDouble(tokenizer.nextToken());
+        int amount = (int) Double.parseDouble(tokenizer.nextToken());
         String agency = tokenizer.nextToken();
         LocalDate date = LocalDate.parse(tokenizer.nextToken(), DateTimeFormatter.ofPattern(DATE_FORMAT));
         String county = tokenizer.nextToken();

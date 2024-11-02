@@ -1,6 +1,6 @@
 package ar.edu.itba.pod.api.query4;
 
-import ar.edu.itba.pod.api.model.dto.Range;
+import ar.edu.itba.pod.api.model.Range;
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
 
@@ -19,10 +19,10 @@ public class TopNInfractionsByFineRangeReducerFactory implements ReducerFactory<
             if (greatestRange == null){
                 greatestRange = range;
             } else {
-                if (Double.compare(range.getValueMin(), greatestRange.getValueMin()) < 0){
+                if (range.getValueMin() < greatestRange.getValueMin()){
                     greatestRange.setValueMin(range.getValueMin());
                 }
-                if (Double.compare(range.getValueMax(), greatestRange.getValueMax()) > 0){
+                if (range.getValueMax() > greatestRange.getValueMax()){
                     greatestRange.setValueMax(range.getValueMax());
                 }
             }

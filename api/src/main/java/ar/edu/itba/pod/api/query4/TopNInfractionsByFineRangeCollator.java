@@ -1,7 +1,7 @@
 package ar.edu.itba.pod.api.query4;
 
 import ar.edu.itba.pod.api.model.dto.InfractionRange;
-import ar.edu.itba.pod.api.model.dto.Range;
+import ar.edu.itba.pod.api.model.Range;
 import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Collator;
 

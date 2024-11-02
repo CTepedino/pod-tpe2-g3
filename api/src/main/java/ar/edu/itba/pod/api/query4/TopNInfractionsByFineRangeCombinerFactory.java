@@ -1,39 +1,40 @@
 package ar.edu.itba.pod.api.query4;
 
-import ar.edu.itba.pod.api.model.dto.Range;
+import ar.edu.itba.pod.api.model.Range;
 import com.hazelcast.mapreduce.Combiner;
 import com.hazelcast.mapreduce.CombinerFactory;
 
 @SuppressWarnings("deprecation")
-public class TopNInfractionsByFineRangeCombinerFactory implements CombinerFactory<String, Double, Range> {
+public class TopNInfractionsByFineRangeCombinerFactory implements CombinerFactory<String, Integer, Range> {
     @Override
-    public Combiner<Double, Range> newCombiner(String s) {
+    public Combiner<Integer, Range> newCombiner(String key) {
         return new TopNInfractionsByFineRangeCombiner();
     }
 
-    private static class TopNInfractionsByFineRangeCombiner extends Combiner<Double, Range> {
-        double min = 0;
-        double max = 0;
+    private static class TopNInfractionsByFineRangeCombiner extends Combiner<Integer, Range> {
+        Range range;
 
         @Override
-        public void combine(Double fine) {
-            if (Double.compare(fine, min) < 0){
-                min = fine;
-            }
-            if (Double.compare(fine, max) > 0){
-                max = fine;
+        public void combine(Integer fine) {
+            if (range == null){
+                range = new Range(fine, fine);
+            } else {
+                if (fine < range.getValueMin()){
+                    range.setValueMin(fine);
+                } else if (fine > range.getValueMax()){
+                    range.setValueMax(fine);
+                }
             }
         }
 
         @Override
         public Range finalizeChunk() {
-            return new Range(min, max);
+            return range;
         }
 
         @Override
         public void reset() {
-            min = 0;
-            max = 0;
+            range = null;
         }
     }
 }

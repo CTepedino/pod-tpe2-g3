@@ -19,7 +19,7 @@ public class CHITicketLineParser extends CSVLineParser<Ticket> {
         String agency = tokenizer.nextToken();
         String plate = tokenizer.nextToken();
         String code = tokenizer.nextToken();
-        double amount = Double.parseDouble(tokenizer.nextToken());
+        int amount = Integer.parseInt(tokenizer.nextToken());
 
         return new Ticket(plate, code, amount, agency, date, community);
     }

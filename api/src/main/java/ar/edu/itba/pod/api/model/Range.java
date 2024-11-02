@@ -1,4 +1,4 @@
-package ar.edu.itba.pod.api.model.dto;
+package ar.edu.itba.pod.api.model;
 
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
@@ -8,58 +8,57 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Range implements DataSerializable {
-    private double valueMin;
-    private double valueMax;
+    private int valueMin;
+    private int valueMax;
 
     public Range(){}
 
-    public Range(double valueMin, double valueMax) {
+    public Range(int valueMin, int valueMax) {
         this.valueMin = valueMin;
         this.valueMax = valueMax;
     }
 
-    public double getValueMin() {
+    public int getValueMin() {
         return valueMin;
     }
 
-    public double getValueMax() {
+    public int getValueMax() {
         return valueMax;
     }
 
-    public void setValueMin(double valueMin) {
+    public void setValueMin(int valueMin) {
         this.valueMin = valueMin;
     }
 
-    public void setValueMax(double valueMax) {
+    public void setValueMax(int valueMax) {
         this.valueMax = valueMax;
     }
 
-    public double getDifference(){
+    public int getDifference(){
         return valueMax - valueMin;
     }
 
     @Override
     public void writeData(ObjectDataOutput out) throws IOException {
-        out.writeDouble(valueMin);
-        out.writeDouble(valueMax);
+        out.writeInt(valueMin);
+        out.writeInt(valueMax);
     }
 
     @Override
     public void readData(ObjectDataInput in) throws IOException {
-        valueMin = in.readDouble();
-        valueMax = in.readDouble();
+        valueMin = in.readInt();
+        valueMax = in.readInt();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Range range)) return false;
-        return Double.compare(valueMin, range.valueMin) == 0 && Double.compare(valueMax, range.valueMax) == 0;
+        return valueMin == range.valueMin && valueMax == range.valueMax;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(valueMin, valueMax);
     }
-
 }

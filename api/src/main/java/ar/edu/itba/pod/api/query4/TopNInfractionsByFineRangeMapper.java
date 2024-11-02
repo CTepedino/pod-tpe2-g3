@@ -7,7 +7,7 @@ import com.hazelcast.mapreduce.Mapper;
 import java.util.Map;
 
 @SuppressWarnings("deprecation")
-public class TopNInfractionsByFineRangeMapper implements Mapper<Long, InfractionAgencyFine, String, Double> {
+public class TopNInfractionsByFineRangeMapper implements Mapper<Long, InfractionAgencyFine, String, Integer> {
     private final String agency;
     private final Map<String, String> infractions;
 
@@ -17,7 +17,7 @@ public class TopNInfractionsByFineRangeMapper implements Mapper<Long, Infraction
     }
 
     @Override
-    public void map(Long key, InfractionAgencyFine value, Context<String, Double> context) {
+    public void map(Long key, InfractionAgencyFine value, Context<String, Integer> context) {
         if (value.getAgency().equals(agency) && infractions.containsKey(value.getInfractionId())){
             context.emit(value.getInfractionId(), value.getFine());
         }

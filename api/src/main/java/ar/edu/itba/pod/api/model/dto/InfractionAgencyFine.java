@@ -10,11 +10,11 @@ import java.util.Objects;
 public class InfractionAgencyFine implements DataSerializable {
     private String infractionId;
     private String agency;
-    private double fine;
+    private int fine;
 
     public InfractionAgencyFine(){}
 
-    public InfractionAgencyFine(String infractionId, String agency, double fine) {
+    public InfractionAgencyFine(String infractionId, String agency, int fine) {
         this.infractionId = infractionId;
         this.agency = agency;
         this.fine = fine;
@@ -24,14 +24,14 @@ public class InfractionAgencyFine implements DataSerializable {
     public void writeData(ObjectDataOutput out) throws IOException {
         out.writeUTF(infractionId);
         out.writeUTF(agency);
-        out.writeDouble(fine);
+        out.writeInt(fine);
     }
 
     @Override
     public void readData(ObjectDataInput in) throws IOException {
         infractionId = in.readUTF();
         agency = in.readUTF();
-        fine = in.readDouble();
+        fine = in.readInt();
     }
 
     public String getInfractionId() {
@@ -42,7 +42,7 @@ public class InfractionAgencyFine implements DataSerializable {
         return agency;
     }
 
-    public double getFine() {
+    public int getFine() {
         return fine;
     }
 
@@ -50,7 +50,7 @@ public class InfractionAgencyFine implements DataSerializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof InfractionAgencyFine that)) return false;
-        return Double.compare(fine, that.fine) == 0 && Objects.equals(infractionId, that.infractionId) && Objects.equals(agency, that.agency);
+        return fine == that.fine && Objects.equals(infractionId, that.infractionId) && Objects.equals(agency, that.agency);
     }
 
     @Override

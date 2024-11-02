@@ -11,14 +11,14 @@ public class Ticket implements DataSerializable {
 
     private String plate;
     private String infractionId;
-    private double fineAmount; //TODO: reemplazar con int?
+    private int fineAmount;
     private String issuingAgency;
     private LocalDate issueDate;
     private String countyName;
 
     public Ticket() {}
 
-    public Ticket(String plate, String infractionId, double fineAmount, String issuingAgency, LocalDate issueDate, String countyName) {
+    public Ticket(String plate, String infractionId, int fineAmount, String issuingAgency, LocalDate issueDate, String countyName) {
         this.plate = plate;
         this.infractionId = infractionId;
         this.fineAmount = fineAmount;
@@ -31,7 +31,7 @@ public class Ticket implements DataSerializable {
     public void writeData(ObjectDataOutput out) throws IOException {
         out.writeUTF(plate);
         out.writeUTF(infractionId);
-        out.writeDouble(fineAmount);
+        out.writeInt(fineAmount);
         out.writeUTF(issuingAgency);
         out.writeObject(issueDate);
         out.writeUTF(countyName);
@@ -41,7 +41,7 @@ public class Ticket implements DataSerializable {
     public void readData(ObjectDataInput in) throws IOException {
         plate = in.readUTF();
         infractionId = in.readUTF();
-        fineAmount = in.readDouble();
+        fineAmount = in.readInt();
         issuingAgency = in.readUTF();
         issueDate = in.readObject();
         countyName = in.readUTF();
@@ -55,7 +55,7 @@ public class Ticket implements DataSerializable {
         return infractionId;
     }
 
-    public double getFineAmount() {
+    public int getFineAmount() {
         return fineAmount;
     }
 

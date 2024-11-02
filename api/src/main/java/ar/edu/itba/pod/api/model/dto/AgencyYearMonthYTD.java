@@ -59,7 +59,7 @@ public class AgencyYearMonthYTD implements DataSerializable, CSVPrintable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AgencyYearMonthYTD that)) return false;
-        return Objects.equals(agency, that.agency) && year == that.year && month == that.month && ytd == that.ytd;
+        return agency.equals(that.agency) && year == that.year && month == that.month && ytd == that.ytd;
     }
 
     @Override

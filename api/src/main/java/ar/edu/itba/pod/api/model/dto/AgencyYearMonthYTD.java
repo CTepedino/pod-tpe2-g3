@@ -12,11 +12,11 @@ public class AgencyYearMonthYTD implements DataSerializable, CSVPrintable {
     private String agency;
     private int year;
     private int month;
-    private Double ytd;
+    private int ytd;
 
     public AgencyYearMonthYTD() {}
 
-    public AgencyYearMonthYTD(String agency, int year, int month, Double ytd) {
+    public AgencyYearMonthYTD(String agency, int year, int month, int ytd) {
         this.agency = agency;
         this.year = year;
         this.month = month;
@@ -28,7 +28,7 @@ public class AgencyYearMonthYTD implements DataSerializable, CSVPrintable {
         out.writeUTF(agency);
         out.writeInt(year);
         out.writeInt(month);
-        out.writeDouble(ytd);
+        out.writeInt(ytd);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class AgencyYearMonthYTD implements DataSerializable, CSVPrintable {
         agency = in.readUTF();
         year = in.readInt();
         month = in.readInt();
-        ytd = in.readDouble();
+        ytd = in.readInt();
     }
 
     public String getAgency() {
@@ -51,7 +51,7 @@ public class AgencyYearMonthYTD implements DataSerializable, CSVPrintable {
         return month;
     }
 
-    public Double getYtd() {
+    public int getYtd() {
         return ytd;
     }
 
@@ -59,7 +59,7 @@ public class AgencyYearMonthYTD implements DataSerializable, CSVPrintable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AgencyYearMonthYTD that)) return false;
-        return Objects.equals(agency, that.agency) && year == that.year && month == that.month && Objects.equals(ytd, that.ytd);
+        return Objects.equals(agency, that.agency) && year == that.year && month == that.month && ytd == that.ytd;
     }
 
     @Override
@@ -69,6 +69,6 @@ public class AgencyYearMonthYTD implements DataSerializable, CSVPrintable {
 
     @Override
     public String printAsCSV(char separator){
-        return agency + separator + year + separator + month + separator + (int) ytd.doubleValue();
+        return agency + separator + year + separator + month + separator + ytd;
     }
 }

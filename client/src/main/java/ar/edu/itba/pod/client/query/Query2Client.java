@@ -2,6 +2,7 @@ package ar.edu.itba.pod.client.query;
 
 import ar.edu.itba.pod.api.model.Ticket;
 import ar.edu.itba.pod.api.model.dto.AgencyYearMonthYTD;
+import ar.edu.itba.pod.api.query2.YTDByAgencyCollator;
 import ar.edu.itba.pod.api.query2.YTDByAgencyCombinerFactory;
 import ar.edu.itba.pod.api.query2.YTDByAgencyMapper;
 import ar.edu.itba.pod.api.query2.YTDByAgencyReducerFactory;
@@ -11,7 +12,7 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.KeyValueSource;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.Job;
-import query2.YTDByAgencyCollator;
+
 
 import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;

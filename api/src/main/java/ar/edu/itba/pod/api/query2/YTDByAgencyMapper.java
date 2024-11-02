@@ -8,17 +8,17 @@ import com.hazelcast.mapreduce.Context;
 import com.hazelcast.mapreduce.Mapper;
 
 @SuppressWarnings("deprecation")
-public class YTDByAgencyMapper implements Mapper<Long, Ticket, AgencyYearPair, Double[]>, HazelcastInstanceAware {
+public class YTDByAgencyMapper implements Mapper<Long, Ticket, AgencyYearPair, Integer[]>, HazelcastInstanceAware {
 
     private transient HazelcastInstance hazelcastInstance;
 
     @Override
-    public void map(Long key, Ticket value, Context<AgencyYearPair, Double[]> context) {
+    public void map(Long key, Ticket value, Context<AgencyYearPair, Integer[]> context) {
         var agencies = hazelcastInstance.getList("g3-agencies");
-        Double[] monthAndAmount = new Double[2];
+        Integer[] monthAndAmount = new Integer[2];
 
         if(agencies.contains(value.getIssuingAgency())){
-            monthAndAmount[0] = (double) value.getIssueDate().getMonthValue() - 1;
+            monthAndAmount[0] = value.getIssueDate().getMonthValue() - 1;
             monthAndAmount[1] = value.getFineAmount();
             context.emit(new AgencyYearPair(value.getIssuingAgency(), value.getIssueDate().getYear()), monthAndAmount);
         }

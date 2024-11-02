@@ -7,14 +7,14 @@ import com.hazelcast.mapreduce.CombinerFactory;
 import java.util.Arrays;
 
 @SuppressWarnings("deprecation")
-public class YTDByAgencyCombinerFactory implements CombinerFactory<AgencyYearPair, Double[], Double[]> {
+public class YTDByAgencyCombinerFactory implements CombinerFactory<AgencyYearPair, Integer[], Integer[]> {
     @Override
-    public Combiner<Double[], Double[]> newCombiner(AgencyYearPair agencyYearPair) {
+    public Combiner<Integer[], Integer[]> newCombiner(AgencyYearPair agencyYearPair) {
         return new YTDByAgencyCombiner();
     }
 
-    private static class YTDByAgencyCombiner extends Combiner<Double[], Double[]>{
-        private Double[] monthlyYTD = new Double[12];
+    private static class YTDByAgencyCombiner extends Combiner<Integer[], Integer[]>{
+        private final Integer[] monthlyYTD = new Integer[12];
 
         @Override
         public void beginCombine() {
@@ -22,21 +22,21 @@ public class YTDByAgencyCombinerFactory implements CombinerFactory<AgencyYearPai
         }
 
         @Override
-        public void combine(Double[] value) {
-            int startIndex = ((int) value[0].doubleValue()) - 1;
+        public void combine(Integer[] value) {
+            int startIndex = value[0] - 1;
             for(int i = startIndex; i < 12; i++){
                 monthlyYTD[i] += value[1];
             }
         }
 
         @Override
-        public Double[] finalizeChunk() {
+        public Integer[] finalizeChunk() {
             return monthlyYTD;
         }
 
         @Override
         public void reset() {
-            Arrays.fill(monthlyYTD,0.0);
+            Arrays.fill(monthlyYTD,0);
         }
     }
 }

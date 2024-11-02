@@ -33,7 +33,7 @@ public class Query1Client{
             CityCSVParserFactory parserFactory = properties.getCity().getParser(properties.getInPath());
 
             AtomicLong incrementalKey = new AtomicLong();
-            Map<Long, InfractionAgencyPair> tickets = hazelcastInstance.getMap("g3-ticket");
+            Map<Long, InfractionAgencyPair> tickets = hazelcastInstance.getMap("g3-tickets");
             tickets.clear();
             parserFactory.getTicketFileParser().consumeAll( t ->
                     tickets.putIfAbsent(incrementalKey.incrementAndGet(), new InfractionAgencyPair(t.getIssuingAgency(), t.getIssuingAgency()))

@@ -15,9 +15,10 @@ public class Query2Client extends QueryClient<Long, Ticket> {
     private static final String JOB_TRACKER_NAME = GROUP_NAME + "-agency-ytd";
     private static final String[] OUT_CSV_HEADERS = {};
     private static final String OUT_CSV_FILENAME = "/query2.csv";
+    private static final String OUT_TIME_FILENAME = "/time2.txt";
 
     public Query2Client() {
-        super(new QueryPropertiesFactory().build());
+        super(new QueryPropertiesFactory().build(), OUT_TIME_FILENAME);
     }
 
     @Override

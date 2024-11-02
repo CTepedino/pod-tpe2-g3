@@ -4,6 +4,7 @@ import ar.edu.itba.pod.api.model.dto.Range;
 import com.hazelcast.mapreduce.Combiner;
 import com.hazelcast.mapreduce.CombinerFactory;
 
+@SuppressWarnings("deprecation")
 public class TopNInfractionsByFineRangeCombinerFactory implements CombinerFactory<String, Double, Range> {
     @Override
     public Combiner<Double, Range> newCombiner(String s) {

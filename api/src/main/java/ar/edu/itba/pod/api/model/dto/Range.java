@@ -34,7 +34,7 @@ public class Range implements DataSerializable {
         this.valueMax = valueMax;
     }
 
-    public double getRange(){
+    public double getDifference(){
         return valueMax - valueMin;
     }
 

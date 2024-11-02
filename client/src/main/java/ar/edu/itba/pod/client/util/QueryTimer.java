@@ -20,7 +20,7 @@ public class QueryTimer {
     }
 
     public void startLoad() throws IOException{
-        writer = new FileWriter(outPath);
+        writer = new FileWriter(outPath, false);
 
         writer.write(getTime() + " - Inicio de la lectura del archivo\n");
     }

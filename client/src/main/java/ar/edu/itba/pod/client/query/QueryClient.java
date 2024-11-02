@@ -79,7 +79,7 @@ public abstract class QueryClient<KeyIn, ValueIn>{
         printer.print(properties.getOutPath() + fileName, results);
     }
 
-    public void executeQuery(){//TODO: timers
+    public void executeQuery(){
 
         try {
 

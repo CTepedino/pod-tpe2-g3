@@ -7,13 +7,13 @@ import com.hazelcast.nio.serialization.DataSerializable;
 import java.io.IOException;
 import java.util.Objects;
 
-public class AgencyYearPair implements DataSerializable {
+public class AgencyYear implements DataSerializable {
     private String agency;
     private int year;
 
-    public AgencyYearPair() {}
+    public AgencyYear() {}
 
-    public AgencyYearPair(String agency, int year) {
+    public AgencyYear(String agency, int year) {
         this.agency = agency;
         this.year = year;
     }
@@ -41,7 +41,7 @@ public class AgencyYearPair implements DataSerializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AgencyYearPair that)) return false;
+        if (!(o instanceof AgencyYear that)) return false;
         return Objects.equals(agency, that.agency) && Objects.equals(year, that.year);
     }
 

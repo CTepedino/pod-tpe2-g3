@@ -1,6 +1,6 @@
 package ar.edu.itba.pod.api.query2;
 
-import ar.edu.itba.pod.api.model.dto.AgencyYearPair;
+import ar.edu.itba.pod.api.model.dto.AgencyYear;
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
 
@@ -8,9 +8,9 @@ import java.util.Arrays;
 
 
 @SuppressWarnings("deprecation")
-public class YTDByAgencyReducerFactory implements ReducerFactory<AgencyYearPair, Integer[], Integer[]> {
+public class YTDByAgencyReducerFactory implements ReducerFactory<AgencyYear, Integer[], Integer[]> {
     @Override
-    public Reducer<Integer[], Integer[]> newReducer(AgencyYearPair key) {
+    public Reducer<Integer[], Integer[]> newReducer(AgencyYear key) {
         return new YTDByAgencyReducer();
     }
 

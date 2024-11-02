@@ -89,6 +89,8 @@ public abstract class QueryClient<KeyIn, ValueIn>{
             mapReduceJob(keyValueSource);
             queryTimer.endJob();
 
+            queryTimer.endQuery();
+
         } catch (ExecutionException | InterruptedException e){
             logger.error("Hazelcast error: {}", e.getMessage());
         } catch (IOException e){

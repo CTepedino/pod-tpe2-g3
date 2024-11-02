@@ -35,7 +35,9 @@ public class QueryTimer {
 
     public void endJob()  throws IOException{
         writer.write(getTime() + " - Fin del trabajo map/reduce\n");
+    }
 
+    public void endQuery() throws IOException{
         writer.flush();
         writer.close();
     }

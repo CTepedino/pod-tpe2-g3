@@ -1,7 +1,7 @@
 package ar.edu.itba.pod.api.query2;
 
 import ar.edu.itba.pod.api.model.dto.AgencyYearMonthYTD;
-import ar.edu.itba.pod.api.model.dto.AgencyYearPair;
+import ar.edu.itba.pod.api.model.dto.AgencyYear;
 import com.hazelcast.mapreduce.Collator;
 
 import java.util.Map;
@@ -9,9 +9,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 @SuppressWarnings("deprecation")
-public class YTDByAgencyCollator implements Collator<Map.Entry<AgencyYearPair, Integer[]>, SortedSet<AgencyYearMonthYTD>> {
+public class YTDByAgencyCollator implements Collator<Map.Entry<AgencyYear, Integer[]>, SortedSet<AgencyYearMonthYTD>> {
     @Override
-    public SortedSet<AgencyYearMonthYTD> collate(Iterable<Map.Entry<AgencyYearPair, Integer[]>> values){
+    public SortedSet<AgencyYearMonthYTD> collate(Iterable<Map.Entry<AgencyYear, Integer[]>> values){
 
         SortedSet<AgencyYearMonthYTD> set = new TreeSet<>(
                 (object1, object2) -> {
@@ -26,7 +26,7 @@ public class YTDByAgencyCollator implements Collator<Map.Entry<AgencyYearPair, I
                 }
         );
 
-        for(Map.Entry<AgencyYearPair, Integer[]> entry : values){
+        for(Map.Entry<AgencyYear, Integer[]> entry : values){
             for(int i = 0; i < entry.getValue().length; i++){
                 set.add(new AgencyYearMonthYTD(
                         entry.getKey().getAgency(),

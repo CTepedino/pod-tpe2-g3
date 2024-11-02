@@ -1,15 +1,15 @@
 package ar.edu.itba.pod.api.query2;
 
-import ar.edu.itba.pod.api.model.dto.AgencyYearPair;
+import ar.edu.itba.pod.api.model.dto.AgencyYear;
 import com.hazelcast.mapreduce.Combiner;
 import com.hazelcast.mapreduce.CombinerFactory;
 
 import java.util.Arrays;
 
 @SuppressWarnings("deprecation")
-public class YTDByAgencyCombinerFactory implements CombinerFactory<AgencyYearPair, Integer[], Integer[]> {
+public class YTDByAgencyCombinerFactory implements CombinerFactory<AgencyYear, Integer[], Integer[]> {
     @Override
-    public Combiner<Integer[], Integer[]> newCombiner(AgencyYearPair agencyYearPair) {
+    public Combiner<Integer[], Integer[]> newCombiner(AgencyYear agencyYearPair) {
         return new YTDByAgencyCombiner();
     }
 

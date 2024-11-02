@@ -2,13 +2,16 @@ package ar.edu.itba.pod.client.query;
 
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyTicketCount;
+import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyCollator;
+import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyCombinerFactory;
+import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyMapperAlternative;
+import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyReducerFactory;
 import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
 import com.hazelcast.core.ICompletableFuture;
 import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
-import query1.*;
 
 import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;

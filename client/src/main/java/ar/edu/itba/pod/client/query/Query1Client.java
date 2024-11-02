@@ -8,10 +8,10 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
-import query1.TotalTicketsByInfractionAndAgencyCollator;
-import query1.TotalTicketsByInfractionAndAgencyCombinerFactory;
-import query1.TotalTicketsByInfractionAndAgencyMapper;
-import query1.TotalTicketsByInfractionAndAgencyReducerFactory;
+import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyCollator;
+import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyCombinerFactory;
+import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyMapper;
+import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyReducerFactory;
 
 import java.util.HashMap;
 import java.util.HashSet;

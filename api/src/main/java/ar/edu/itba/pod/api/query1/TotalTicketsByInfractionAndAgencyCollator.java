@@ -1,13 +1,10 @@
-package query1;
+package ar.edu.itba.pod.api.query1;
 
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyTicketCount;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Collator;
 
-import java.util.Comparator;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;

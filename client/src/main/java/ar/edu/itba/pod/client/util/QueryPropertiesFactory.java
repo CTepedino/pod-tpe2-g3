@@ -1,5 +1,6 @@
-package ar.edu.itba.pod.client.query;
+package ar.edu.itba.pod.client.util;
 
+import ar.edu.itba.pod.client.City;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,32 +12,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class QueryPropertiesParserFactory {
+public class QueryPropertiesFactory {
     private int n = 0;
     private boolean dateRange = false;
     private boolean agency = false;
 
-    public QueryPropertiesParserFactory useN(int n){
+    public QueryPropertiesFactory useN(int n){
         this.n = n;
         return this;
     }
 
-    public QueryPropertiesParserFactory useDateRange(){
+    public QueryPropertiesFactory useDateRange(){
         dateRange = true;
         return this;
     }
 
-    public QueryPropertiesParserFactory useAgency(){
+    public QueryPropertiesFactory useAgency(){
         agency = true;
         return this;
     }
 
-    public QueryPropertiesParser build(){
-        return new QueryPropertiesParser(n, dateRange, agency);
+    public QueryProperties build(){
+        return new QueryProperties(n, dateRange, agency);
     }
 
-    public static class QueryPropertiesParser{
-        private static final Logger logger = LoggerFactory.getLogger(QueryPropertiesParser.class);
+    public static class QueryProperties{
+        private static final Logger logger = LoggerFactory.getLogger(QueryProperties.class);
 
         private static final String IPV4_PATTERN = "^(localhost|(((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)))(:\\d{1,5})?$";
 
@@ -50,10 +51,10 @@ public class QueryPropertiesParserFactory {
         private String agency;
 
 
-        private QueryPropertiesParser(int minN, boolean useDateRange, boolean useAgency){
+        private QueryProperties(int minN, boolean useDateRange, boolean useAgency){
             addresses = parseAddresses();
             city = parseCity();
-            inPath = parsePath("inPath");//TODO: verificar que existan los csv en el directorio de entrada
+            inPath = parsePath("inPath");
             outPath = parsePath("outPath");
             if (minN != 0){
                 n = parseN(minN);

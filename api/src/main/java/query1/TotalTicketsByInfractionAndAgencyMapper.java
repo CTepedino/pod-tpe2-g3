@@ -14,10 +14,18 @@ public class TotalTicketsByInfractionAndAgencyMapper implements Mapper<Long, Inf
     private static final Long ONE = 1L;
     private transient HazelcastInstance hazelcastInstance;
 
+    private final String infractionMapName;
+    private final String agencyListName;
+
+    public TotalTicketsByInfractionAndAgencyMapper(String infractionMapName, String agencyListName){
+        this.infractionMapName = infractionMapName;
+        this.agencyListName = agencyListName;
+    }
+
     @Override
     public void map(Long key, InfractionAgencyPair value, Context<InfractionAgencyPair, Long> context) {
-        var infractions = hazelcastInstance.getMap("g3-infractions");
-        var agencies = hazelcastInstance.getList("g3-agencies");
+        var infractions = hazelcastInstance.getMap(infractionMapName);
+        var agencies = hazelcastInstance.getList(agencyListName);
 
         if (infractions.containsKey(value.getInfractionId()) && agencies.contains(value.getAgency())) {
             context.emit(value, ONE);

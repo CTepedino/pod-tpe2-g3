@@ -3,6 +3,8 @@ package ar.edu.itba.pod.client.query;
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyPair;
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyTicketCount;
 import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;
+import ar.edu.itba.pod.client.util.CSVPrinter;
+import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICompletableFuture;
@@ -32,7 +34,7 @@ public class Query1Client{
 
         logger.info("Query1 Client starting...");
 
-        QueryPropertiesParserFactory.QueryPropertiesParser properties = new QueryPropertiesParserFactory().build();
+        QueryPropertiesFactory.QueryProperties properties = new QueryPropertiesFactory().build();
 
         try {
             HazelcastInstance hazelcastInstance = ClientUtils.startHazelcast(properties.getAddresses());

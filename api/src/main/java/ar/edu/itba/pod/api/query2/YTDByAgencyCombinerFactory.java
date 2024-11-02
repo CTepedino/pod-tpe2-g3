@@ -1,42 +1,42 @@
 package ar.edu.itba.pod.api.query2;
 
 import ar.edu.itba.pod.api.model.dto.AgencyYear;
+import ar.edu.itba.pod.api.model.dto.MonthFine;
 import com.hazelcast.mapreduce.Combiner;
 import com.hazelcast.mapreduce.CombinerFactory;
 
 import java.util.Arrays;
 
 @SuppressWarnings("deprecation")
-public class YTDByAgencyCombinerFactory implements CombinerFactory<AgencyYear, Integer[], Integer[]> {
+public class YTDByAgencyCombinerFactory implements CombinerFactory<AgencyYear, MonthFine, Integer[]> {
     @Override
-    public Combiner<Integer[], Integer[]> newCombiner(AgencyYear agencyYearPair) {
+    public Combiner<MonthFine, Integer[]> newCombiner(AgencyYear key) {
         return new YTDByAgencyCombiner();
     }
 
-    private static class YTDByAgencyCombiner extends Combiner<Integer[], Integer[]>{
-        private final Integer[] monthlyYTD = new Integer[12];
+    private static class YTDByAgencyCombiner extends Combiner<MonthFine, Integer[]> {
+        private static final int MONTH_COUNT = 12;
+        private Integer[] monthTotal;
 
-        @Override
-        public void beginCombine() {
-            Arrays.fill(monthlyYTD,0.0);
+        private YTDByAgencyCombiner(){
+            monthTotal = new Integer[MONTH_COUNT];
+            Arrays.fill(monthTotal, 0);
         }
 
         @Override
-        public void combine(Integer[] value) {
-            int startIndex = value[0] - 1;
-            for(int i = startIndex; i < 12; i++){
-                monthlyYTD[i] += value[1];
-            }
+        public void combine(MonthFine monthFine) {
+            monthTotal[monthFine.getMonth().getValue()-1] += monthFine.getFine();
         }
 
         @Override
         public Integer[] finalizeChunk() {
-            return monthlyYTD;
+            return monthTotal;
         }
 
         @Override
         public void reset() {
-            Arrays.fill(monthlyYTD,0);
+            monthTotal = new Integer[MONTH_COUNT];
+            Arrays.fill(monthTotal, 0);
         }
     }
 }

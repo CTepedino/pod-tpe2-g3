@@ -1,31 +1,25 @@
 package ar.edu.itba.pod.api.query2;
 
-import ar.edu.itba.pod.api.model.Ticket;
+import ar.edu.itba.pod.api.model.dto.AgencyDateFine;
 import ar.edu.itba.pod.api.model.dto.AgencyYear;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.HazelcastInstanceAware;
+import ar.edu.itba.pod.api.model.dto.MonthFine;
 import com.hazelcast.mapreduce.Context;
 import com.hazelcast.mapreduce.Mapper;
 
+import java.util.Set;
+
 @SuppressWarnings("deprecation")
-public class YTDByAgencyMapper implements Mapper<Long, Ticket, AgencyYear, Integer[]>, HazelcastInstanceAware {
+public class YTDByAgencyMapper implements Mapper<Long, AgencyDateFine, AgencyYear, MonthFine>{
+    private final Set<String> agencySet;
 
-    private transient HazelcastInstance hazelcastInstance;
-
-    @Override
-    public void map(Long key, Ticket value, Context<AgencyYear, Integer[]> context) {
-        var agencies = hazelcastInstance.getList("g3-agencies");
-        Integer[] monthAndAmount = new Integer[2];
-
-        if(agencies.contains(value.getIssuingAgency())){
-            monthAndAmount[0] = value.getIssueDate().getMonthValue() - 1;
-            monthAndAmount[1] = value.getFineAmount();
-            context.emit(new AgencyYear(value.getIssuingAgency(), value.getIssueDate().getYear()), monthAndAmount);
-        }
+    public YTDByAgencyMapper(Set<String> agencySet){
+        this.agencySet = agencySet;
     }
 
     @Override
-    public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
-        this.hazelcastInstance = hazelcastInstance;
+    public void map(Long key, AgencyDateFine value, Context<AgencyYear, MonthFine> context) {
+        if (agencySet.contains(value.getAgency())){
+            context.emit(new AgencyYear(value.getAgency(), value.getDate().getYear()), new MonthFine(value.getDate().getMonth(), value.getFine()));
+        }
     }
 }

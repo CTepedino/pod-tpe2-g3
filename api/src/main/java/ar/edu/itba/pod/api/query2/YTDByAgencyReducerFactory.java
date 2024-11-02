@@ -6,7 +6,6 @@ import com.hazelcast.mapreduce.ReducerFactory;
 
 import java.util.Arrays;
 
-
 @SuppressWarnings("deprecation")
 public class YTDByAgencyReducerFactory implements ReducerFactory<AgencyYear, Integer[], Integer[]> {
     @Override
@@ -14,26 +13,25 @@ public class YTDByAgencyReducerFactory implements ReducerFactory<AgencyYear, Int
         return new YTDByAgencyReducer();
     }
 
-    private static class YTDByAgencyReducer extends Reducer<Integer[], Integer[]>{
-        private final Integer[] monthlyYTD = new Integer[12];
+    private static class YTDByAgencyReducer extends Reducer<Integer[], Integer[]> {
+        private static final int MONTH_COUNT = 12;
+        Integer[] monthTotal;
 
-        @Override
-        public void beginReduce() {
-            Arrays.fill(monthlyYTD,0);
+        private YTDByAgencyReducer(){
+            monthTotal = new Integer[MONTH_COUNT];
+            Arrays.fill(monthTotal, 0);
         }
 
         @Override
-        public void reduce(Integer[] value){
-            int startIndex = value[0] - 1;
-            for(int i = startIndex; i < 12; i++){
-                monthlyYTD[i] += value[1];
+        public void reduce(Integer[] monthPartial) {
+            for (int i = 0; i < monthTotal.length; i++){
+                monthTotal[i] += monthPartial[i];
             }
         }
 
         @Override
-        public Integer[] finalizeReduce(){
-            return monthlyYTD;
+        public Integer[] finalizeReduce() {
+            return monthTotal;
         }
-
     }
 }

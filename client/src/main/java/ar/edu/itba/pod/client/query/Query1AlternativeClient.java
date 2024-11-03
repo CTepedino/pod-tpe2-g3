@@ -4,7 +4,7 @@ import ar.edu.itba.pod.api.model.dto.InfractionAgency;
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyTicketCount;
 import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyCollator;
 import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyCombinerFactory;
-import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyMapperAlternative;
+import ar.edu.itba.pod.api.query1.alternative.TotalTicketsByInfractionAndAgencyMapperAlternative;
 import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyReducerFactory;
 import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
 import com.hazelcast.core.ICompletableFuture;

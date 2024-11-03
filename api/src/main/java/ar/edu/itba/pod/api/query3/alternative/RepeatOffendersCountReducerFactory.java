@@ -1,4 +1,4 @@
-package ar.edu.itba.pod.api.query3;
+package ar.edu.itba.pod.api.query3.alternative;
 
 import ar.edu.itba.pod.api.model.dto.PlateCounty;
 import com.hazelcast.mapreduce.Reducer;

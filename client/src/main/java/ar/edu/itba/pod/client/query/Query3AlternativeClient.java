@@ -16,20 +16,20 @@ import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("deprecation")
-public class Query3Client extends QueryClient<PlateDateCounty> {
-    private static final String JOB_TRACKER_NAME = GROUP_NAME + "-repeat-offender-percent";
+public class Query3AlternativeClient extends QueryClient<PlateDateCounty> {
+    private static final String JOB_TRACKER_NAME = GROUP_NAME + "-repeat-offender-percent-a";
     private static final String[] OUT_CSV_HEADERS = {"County", "Percentage"};
-    private static final String OUT_CSV_FILENAME = "/query3.csv";
-    private static final String OUT_TIME_FILENAME = "/time3.txt";
+    private static final String OUT_CSV_FILENAME = "/query3a.csv";
+    private static final String OUT_TIME_FILENAME = "/time3a.txt";
     private static final int MINIMUM_N = 2;
     private static final String TICKET_COUNT_MAP = GROUP_NAME + "-ticket-count";
 
-    public Query3Client(){
+    public Query3AlternativeClient(){
         super(new QueryPropertiesFactory()
-                .useN(MINIMUM_N)
-                .useDateRange()
-                .build(),
-            OUT_TIME_FILENAME);
+                        .useN(MINIMUM_N)
+                        .useDateRange()
+                        .build(),
+                OUT_TIME_FILENAME);
     }
 
     @Override
@@ -91,6 +91,6 @@ public class Query3Client extends QueryClient<PlateDateCounty> {
     }
 
     public static void main(String[] args){
-        new Query3Client().executeQuery();
+        new Query3AlternativeClient().executeQuery();
     }
 }

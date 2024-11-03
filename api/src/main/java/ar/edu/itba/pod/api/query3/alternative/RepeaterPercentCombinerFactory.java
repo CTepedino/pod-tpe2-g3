@@ -1,10 +1,8 @@
-package ar.edu.itba.pod.api.query3;
+package ar.edu.itba.pod.api.query3.alternative;
 
 import ar.edu.itba.pod.api.model.dto.InfractionRepeaters;
 import com.hazelcast.mapreduce.Combiner;
 import com.hazelcast.mapreduce.CombinerFactory;
-
-import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public class RepeaterPercentCombinerFactory implements CombinerFactory<String, Boolean, InfractionRepeaters> {

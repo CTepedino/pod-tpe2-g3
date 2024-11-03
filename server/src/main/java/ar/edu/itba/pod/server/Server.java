@@ -15,6 +15,7 @@ public class Server {
 
     private static final String GROUP_NAME = "g3";
     private static final String GROUP_PASS = GROUP_NAME + "-pass";
+    private static final String EXECUTOR_NAME = GROUP_NAME + "-executor";
 
     private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
@@ -46,14 +47,6 @@ public class Server {
 
         NetworkConfig networkConfig = new NetworkConfig().setInterfaces(interfacesConfig).setJoin(joinConfig);
         config.setNetworkConfig(networkConfig);
-
-        //TODO: para paralelizar la lectura de CSVs
-/*        ExecutorConfig executorConfig = new ExecutorConfig()
-                .setName("g3-executor")
-                .setPoolSize(16)
-                .setQueueCapacity(1000);
-
-        config.addExecutorConfig(executorConfig);*/
 
         Hazelcast.newHazelcastInstance(config);
     }

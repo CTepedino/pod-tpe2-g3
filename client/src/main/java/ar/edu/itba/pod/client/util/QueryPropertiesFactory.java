@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -109,18 +111,20 @@ public class QueryPropertiesFactory {
         }
 
         private String parsePath(String property){
-
-            String path = System.getProperty(property);
-            if (path == null){
+            String pathString = System.getProperty(property);
+            if (pathString == null){
                 logger.error("Path not specified");
                 throw new IllegalStateException();
             }
-
-            if (!Files.isDirectory(java.nio.file.Path.of(path))){
+            if (pathString.startsWith("~")) {
+                pathString = System.getProperty("user.home") + pathString.substring(1);
+            }
+            Path path = Paths.get(pathString);
+            if (!Files.isDirectory(path)){
                 logger.error("Invalid path: {}", path);
                 throw new IllegalStateException();
             }
-            return path;
+            return pathString;
         }
 
         private int parseN(int minN){

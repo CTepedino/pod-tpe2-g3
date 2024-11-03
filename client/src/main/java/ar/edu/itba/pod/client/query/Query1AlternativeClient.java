@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Se puede aplicar el mismo cambio a todas las otras queries, solo dejamos esta de ejemplo
  */
 @SuppressWarnings("deprecation")
-public class Query1AlternativeClient extends QueryClient<Long, InfractionAgency> {
+public class Query1AlternativeClient extends QueryClient<InfractionAgency> {
     private static final String JOB_TRACKER_NAME = GROUP_NAME + "-ticket-count-a";
     private static final String[] OUT_CSV_HEADERS = {"Infraction", "Agency", "Tickets"};
     private static final String OUT_CSV_FILENAME = "/query1a.csv";
@@ -55,13 +55,7 @@ public class Query1AlternativeClient extends QueryClient<Long, InfractionAgency>
     KeyValueSource<Long, InfractionAgency> loadData(){
         fillAgencySet();
         fillInfractionsMap();
-        AtomicLong incrementalKey = new AtomicLong();
-        IMap<Long, InfractionAgency> tickets = hazelcastInstance.getMap(TICKET_MAP);
-        tickets.clear();
-        csvParserFactory.getTicketFileParser().consumeAll( t ->
-                tickets.put(incrementalKey.incrementAndGet(), new InfractionAgency(t.getIssuingAgency(), t.getInfractionId()))
-        );
-        return KeyValueSource.fromMap(tickets);
+        return loadTicketData(t -> new InfractionAgency(t.getIssuingAgency(), t.getInfractionId()));
     }
 
     @Override

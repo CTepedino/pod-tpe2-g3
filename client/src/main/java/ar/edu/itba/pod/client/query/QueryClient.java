@@ -1,6 +1,8 @@
 package ar.edu.itba.pod.client.query;
 
 import ar.edu.itba.pod.api.model.CSVPrintable;
+import ar.edu.itba.pod.api.model.Ticket;
+import ar.edu.itba.pod.api.model.dto.InfractionAgency;
 import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;
 import ar.edu.itba.pod.client.util.CSVPrinter;
 import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
@@ -13,21 +15,25 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.ISet;
 import com.hazelcast.mapreduce.KeyValueSource;
+import com.hazelcast.query.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @SuppressWarnings("deprecation")
-public abstract class QueryClient<KeyIn, ValueIn>{
+public abstract class QueryClient<ValueIn>{
     static final Logger logger = LoggerFactory.getLogger(QueryClient.class);
 
     static final String GROUP_NAME = "g3";
     private static final String GROUP_PASS = GROUP_NAME + "-pass";
 
-    static final String TICKET_MAP = GROUP_NAME + "-tickets";
+    private static final String TICKET_MAP = GROUP_NAME + "-tickets";
 
     private final QueryTimer queryTimer;
 
@@ -72,8 +78,18 @@ public abstract class QueryClient<KeyIn, ValueIn>{
         return infractions;
     }
 
-    abstract KeyValueSource<KeyIn, ValueIn> loadData();
-    abstract void mapReduceJob(KeyValueSource<KeyIn, ValueIn> keyValueSource) throws ExecutionException, InterruptedException;
+    KeyValueSource<Long, ValueIn> loadTicketData(Function<Ticket, ValueIn> dtoMapper){
+        AtomicLong incrementalKey = new AtomicLong();
+        IMap<Long, ValueIn> tickets = hazelcastInstance.getMap(TICKET_MAP);
+        tickets.clear();
+        csvParserFactory.getTicketFileParser().consumeAll( t ->
+                tickets.put(incrementalKey.incrementAndGet(), dtoMapper.apply(t))
+        );
+        return KeyValueSource.fromMap(tickets);
+    }
+
+    abstract KeyValueSource<Long, ValueIn> loadData();
+    abstract void mapReduceJob(KeyValueSource<Long, ValueIn> keyValueSource) throws ExecutionException, InterruptedException;
 
     void printResults(String[] headers, String fileName, Iterable<? extends CSVPrintable> results){
         CSVPrinter printer = new CSVPrinter(headers);
@@ -84,7 +100,7 @@ public abstract class QueryClient<KeyIn, ValueIn>{
 
         try {
             queryTimer.startLoad();
-            KeyValueSource<KeyIn, ValueIn> keyValueSource = loadData();
+            KeyValueSource<Long, ValueIn> keyValueSource = loadData();
             queryTimer.endLoad();
 
             queryTimer.startJob();

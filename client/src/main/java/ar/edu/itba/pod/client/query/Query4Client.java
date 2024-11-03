@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings("deprecation")
-public class Query4Client extends QueryClient<Long, InfractionAgencyFine>{
+public class Query4Client extends QueryClient<InfractionAgencyFine>{
     private static final String JOB_TRACKER_NAME = GROUP_NAME + "-top-infractions";
     private static final String[] OUT_CSV_HEADERS = {"Infraction", "Min", "Max", "Diff"};
     private static final String OUT_CSV_FILENAME = "/query4.csv";
@@ -39,13 +39,7 @@ public class Query4Client extends QueryClient<Long, InfractionAgencyFine>{
     @Override
     KeyValueSource<Long, InfractionAgencyFine> loadData() {
         infractions = getInfractionsMap();
-        AtomicLong incrementalKey = new AtomicLong();
-        IMap<Long, InfractionAgencyFine> tickets = hazelcastInstance.getMap(TICKET_MAP);
-        tickets.clear();
-        csvParserFactory.getTicketFileParser().consumeAll( t ->
-            tickets.put(incrementalKey.incrementAndGet(), new InfractionAgencyFine(t.getInfractionId(), t.getIssuingAgency(), t.getFineAmount()))
-        );
-        return KeyValueSource.fromMap(tickets);
+        return loadTicketData(t -> new InfractionAgencyFine(t.getInfractionId(), t.getIssuingAgency(), t.getFineAmount()));
     }
 
     @Override

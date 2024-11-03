@@ -7,7 +7,7 @@ import com.hazelcast.mapreduce.KeyValueSource;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("deprecation")
-public class Query3Client extends QueryClient<Long, Ticket> {
+public class Query3Client extends QueryClient<Ticket> {
     private static final String JOB_TRACKER_NAME = GROUP_NAME + "-repeat-offender-percent";
     private static final String[] OUT_CSV_HEADERS = {"County", "Percentage"};
     private static final String OUT_CSV_FILENAME = "/query3.csv";

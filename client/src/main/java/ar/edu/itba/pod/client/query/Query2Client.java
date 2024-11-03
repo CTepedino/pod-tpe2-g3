@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings("deprecation")
-public class Query2Client extends QueryClient<Long, AgencyDateFine> {
+public class Query2Client extends QueryClient<AgencyDateFine> {
     private static final String JOB_TRACKER_NAME = GROUP_NAME + "-agency-ytd";
     private static final String[] OUT_CSV_HEADERS = {"Agency", "Year", "Month", "YTD"};
     private static final String OUT_CSV_FILENAME = "/query2.csv";
@@ -36,14 +36,7 @@ public class Query2Client extends QueryClient<Long, AgencyDateFine> {
     @Override
     public KeyValueSource<Long, AgencyDateFine> loadData(){
         agencies = getAgencySet();
-
-        AtomicLong incrementalKey = new AtomicLong();
-        IMap<Long, AgencyDateFine> tickets = hazelcastInstance.getMap(TICKET_MAP);
-        tickets.clear();
-        csvParserFactory.getTicketFileParser().consumeAll( t ->
-                tickets.put(incrementalKey.incrementAndGet(), new AgencyDateFine(t.getIssuingAgency(), t.getIssueDate(), t.getFineAmount()))
-        );
-        return KeyValueSource.fromMap(tickets);
+        return loadTicketData(t -> new AgencyDateFine(t.getIssuingAgency(), t.getIssueDate(), t.getFineAmount()));
     }
 
     @Override

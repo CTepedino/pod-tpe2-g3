@@ -12,9 +12,9 @@ import java.util.TreeSet;
 
 @SuppressWarnings("deprecation")
 public class TotalTicketsByInfractionAndAgencyCollator implements Collator<Map.Entry<InfractionAgency, Long>, SortedSet<InfractionAgencyTicketCount>> {
-    private final IMap<String, String> infractions;
+    private final Map<String, String> infractions;
 
-    public TotalTicketsByInfractionAndAgencyCollator(IMap<String, String> infractions){
+    public TotalTicketsByInfractionAndAgencyCollator(Map<String, String> infractions){
         this.infractions = infractions;
     }
 

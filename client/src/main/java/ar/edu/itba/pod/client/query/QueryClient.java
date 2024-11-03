@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("deprecation")
@@ -27,9 +27,7 @@ public abstract class QueryClient<KeyIn, ValueIn>{
     static final String GROUP_NAME = "g3";
     private static final String GROUP_PASS = GROUP_NAME + "-pass";
 
-    protected static final String AGENCY_SET = GROUP_NAME + "-agencies";
-    protected static final String INFRACTION_MAP = GROUP_NAME + "-infractions";
-    protected static final String TICKET_MAP = GROUP_NAME + "-tickets";
+    static final String TICKET_MAP = GROUP_NAME + "-tickets";
 
     private final QueryTimer queryTimer;
 
@@ -55,18 +53,18 @@ public abstract class QueryClient<KeyIn, ValueIn>{
             return HazelcastClient.newHazelcastClient(clientConfig);
     }
 
-    void fillAgencyList(){
-        ISet<String> agencies = hazelcastInstance.getSet(AGENCY_SET);
-        agencies.clear();
+    Set<String> getAgencySet(){
+        Set<String> agencies = new HashSet<>();
         csvParserFactory.getAgencyFileParser().consumeAll(agencies::add);
+        return agencies;
     }
 
-    void fillInfractionsMap(){
-        IMap<String, String> infractions = hazelcastInstance.getMap(INFRACTION_MAP);
-        infractions.clear();
-        csvParserFactory.getInfractionFileParser().consumeAll(i ->
-            infractions.put(i.getId(), i.getDefinition())
+    Map<String, String> getInfractionsMap(){
+        Map<String, String> infractions = new HashMap<>();
+        csvParserFactory.getInfractionFileParser().consumeAll(infraction ->
+                infractions.put(infraction.getId(), infraction.getDefinition())
         );
+        return infractions;
     }
 
     abstract KeyValueSource<KeyIn, ValueIn> loadData();

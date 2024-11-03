@@ -26,6 +26,8 @@ public class Query4Client extends QueryClient<Long, InfractionAgencyFine>{
     private static final String OUT_TIME_FILENAME = "/time4.txt";
     private static final int MINIMUM_N = 1;
 
+    private Map<String, String> infractions;
+
     public Query4Client(){
         super(new QueryPropertiesFactory()
                 .useN(MINIMUM_N)
@@ -36,7 +38,7 @@ public class Query4Client extends QueryClient<Long, InfractionAgencyFine>{
 
     @Override
     KeyValueSource<Long, InfractionAgencyFine> loadData() {
-        fillInfractionsMap();
+        infractions = getInfractionsMap();
         AtomicLong incrementalKey = new AtomicLong();
         IMap<Long, InfractionAgencyFine> tickets = hazelcastInstance.getMap(TICKET_MAP);
         tickets.clear();
@@ -52,10 +54,10 @@ public class Query4Client extends QueryClient<Long, InfractionAgencyFine>{
         Job<Long, InfractionAgencyFine> job = jobTracker.newJob(keyValueSource);
 
         ICompletableFuture<List<InfractionRange>> future = job
-                .mapper(new TopNInfractionsByFineRangeMapper(properties.getAgency(), new HashMap<>(hazelcastInstance.getMap(INFRACTION_MAP))))
+                .mapper(new TopNInfractionsByFineRangeMapper(properties.getAgency(), infractions))
                 .combiner(new TopNInfractionsByFineRangeCombinerFactory())
                 .reducer(new TopNInfractionsByFineRangeReducerFactory())
-                .submit(new TopNInfractionsByFineRangeCollator(hazelcastInstance.getMap(INFRACTION_MAP), properties.getN()));
+                .submit(new TopNInfractionsByFineRangeCollator(infractions, properties.getN()));
 
         List<InfractionRange> list = future.get();
         printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, list);

@@ -13,8 +13,8 @@ import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyCombinerFacto
 import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyMapper;
 import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyReducerFactory;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
@@ -26,14 +26,19 @@ public class Query1Client extends QueryClient<Long, InfractionAgency> {
     private static final String OUT_CSV_FILENAME = "/query1.csv";
     private static final String OUT_TIME_FILENAME = "/time1.txt";
 
+    private Set<String> agencies;
+    private Map<String, String> infractions;
+
+
     public Query1Client() {
         super(new QueryPropertiesFactory().build(), OUT_TIME_FILENAME);
     }
 
     @Override
     public KeyValueSource<Long, InfractionAgency> loadData(){
-        fillAgencyList();
-        fillInfractionsMap();
+        agencies = getAgencySet();
+        infractions = getInfractionsMap();
+
         AtomicLong incrementalKey = new AtomicLong();
         IMap<Long, InfractionAgency> tickets = hazelcastInstance.getMap(TICKET_MAP);
         tickets.clear();
@@ -49,12 +54,10 @@ public class Query1Client extends QueryClient<Long, InfractionAgency> {
         JobTracker jobTracker = hazelcastInstance.getJobTracker(JOB_TRACKER_NAME);
         Job<Long, InfractionAgency> job = jobTracker.newJob(keyValueSource);
         ICompletableFuture<SortedSet<InfractionAgencyTicketCount>> future = job
-                .mapper(new TotalTicketsByInfractionAndAgencyMapper(
-                        new HashMap<>(hazelcastInstance.getMap(INFRACTION_MAP)),
-                        new HashSet<>(hazelcastInstance.getSet(AGENCY_SET))))
+                .mapper(new TotalTicketsByInfractionAndAgencyMapper(infractions, agencies))
                 .combiner(new TotalTicketsByInfractionAndAgencyCombinerFactory())
                 .reducer(new TotalTicketsByInfractionAndAgencyReducerFactory())
-                .submit(new TotalTicketsByInfractionAndAgencyCollator(hazelcastInstance.getMap(INFRACTION_MAP)));
+                .submit(new TotalTicketsByInfractionAndAgencyCollator(infractions));
 
         SortedSet<InfractionAgencyTicketCount> set = future.get();
         printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, set);

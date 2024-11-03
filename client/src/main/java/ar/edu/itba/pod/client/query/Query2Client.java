@@ -15,6 +15,7 @@ import com.hazelcast.mapreduce.Job;
 
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
@@ -26,13 +27,16 @@ public class Query2Client extends QueryClient<Long, AgencyDateFine> {
     private static final String OUT_CSV_FILENAME = "/query2.csv";
     private static final String OUT_TIME_FILENAME = "/time2.txt";
 
+    private Set<String> agencies;
+
     public Query2Client() {
         super(new QueryPropertiesFactory().build(), OUT_TIME_FILENAME);
     }
 
     @Override
     public KeyValueSource<Long, AgencyDateFine> loadData(){
-        fillAgencyList();
+        agencies = getAgencySet();
+
         AtomicLong incrementalKey = new AtomicLong();
         IMap<Long, AgencyDateFine> tickets = hazelcastInstance.getMap(TICKET_MAP);
         tickets.clear();
@@ -48,8 +52,7 @@ public class Query2Client extends QueryClient<Long, AgencyDateFine> {
         JobTracker jobTracker = hazelcastInstance.getJobTracker(JOB_TRACKER_NAME);
         Job<Long, AgencyDateFine> job = jobTracker.newJob(keyValueSource);
         ICompletableFuture<SortedSet<AgencyYearMonthYTD>> future = job
-                .mapper(new YTDByAgencyMapper(
-                        new HashSet<>(hazelcastInstance.getSet(AGENCY_SET))))
+                .mapper(new YTDByAgencyMapper(agencies))
                 .combiner(new YTDByAgencyCombinerFactory())
                 .reducer(new YTDByAgencyReducerFactory())
                 .submit(new YTDByAgencyCollator());

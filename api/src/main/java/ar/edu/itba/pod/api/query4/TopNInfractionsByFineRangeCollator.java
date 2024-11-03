@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("deprecation")
 public class TopNInfractionsByFineRangeCollator implements Collator<Map.Entry<String, Range>, List<InfractionRange>> {
-    private final IMap<String, String> infractions;
+    private final Map<String, String> infractions;
     private final int topN;
 
-    public TopNInfractionsByFineRangeCollator(IMap<String, String> infractions, int topN){
+    public TopNInfractionsByFineRangeCollator(Map<String, String> infractions, int topN){
         this.infractions = infractions;
         this.topN = topN;
     }

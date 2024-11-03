@@ -29,7 +29,11 @@ public class CSVFileParser<T> {
         lines.close();
     }
 
-    public void consumeAll(Consumer<T> consumer) {
+    public void consumeAll(Consumer<T> consumer){
+        lines.forEach(line -> lineParser.consume(line, consumer));
+    }
+
+    public void consumeAllParallel(Consumer<T> consumer) {
         lines.parallel().forEach(line -> lineParser.consume(line, consumer));
     }
 }

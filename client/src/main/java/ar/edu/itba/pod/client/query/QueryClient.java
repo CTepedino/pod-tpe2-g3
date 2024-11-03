@@ -82,7 +82,7 @@ public abstract class QueryClient<ValueIn>{
         AtomicLong incrementalKey = new AtomicLong();
         IMap<Long, ValueIn> tickets = hazelcastInstance.getMap(TICKET_MAP);
         tickets.clear();
-        csvParserFactory.getTicketFileParser().consumeAll( t ->
+        csvParserFactory.getTicketFileParser().consumeAllParallel( t ->
                 tickets.put(incrementalKey.incrementAndGet(), dtoMapper.apply(t))
         );
         return KeyValueSource.fromMap(tickets);

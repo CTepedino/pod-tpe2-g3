@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class InfractionAgency implements DataSerializable {
-    private String agency;
-    private String infractionId;
+    private String agency = "";
+    private String infractionId = "";
 
     public InfractionAgency(){}
 

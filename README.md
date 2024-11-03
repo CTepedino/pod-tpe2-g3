@@ -45,7 +45,31 @@ Para correr la primera query, efecutar el siguinete comando:
 sh query1.sh -Daddresses='10.6.0.1:5701' -Dcity=NYC  -DinPath={path al directorio} -DoutPath={path al directorio}
 ```
 
--Daddresses efiere a las direcciones IP de los nodos con sus puertos, si hay mas de una se separan con ;
+-Daddresses se refiere a las direcciones IP de los nodos con sus puertos, si hay mas de una se separan con ;
 -Dcity indica la ciudad, NYC para Nueva York y CHI para Chicago
 -DinPath indica el path donde están los archivos de entrada de multas, infracciones y agencias
 -DoutPath indica el path donde estarán ambos archivos de salida query1.csv y time1.txt. 
+
+Query 2:
+
+```bash
+sh query1.sh -Daddresses='10.6.0.1:5701' -Dcity=NYC  -DinPath={path al directorio} -DoutPath={path al directorio}
+```
+
+Query 3:
+
+```bash
+sh query1.sh -Daddresses='10.6.0.1:5701' -Dcity=NYC  -DinPath={path al directorio} -DoutPath={path al directorio} -Dn=2 -Dfrom=01/01/2021 -Dto=31/12/2021
+```
+-Dn se refiere a la minima cantidad de mutlas para considerar que la patente es reincidente en un barrio
+-Dfrom y -Dto para indicar el rango de fechas
+
+
+Query 4:
+
+```bash
+sh query1.sh -Daddresses='10.6.0.1:5701' -Dcity=NYC  -DinPath={path al directorio} -DoutPath={path al directorio} -Dn=3 -Dagency=DEPARTMENT_OF_TRANSPORTATION
+```
+
+-Dn indica para listar las primeras n infracciones
+-Dagency para indicar la agencia

@@ -1,7 +1,6 @@
 package ar.edu.itba.pod.client.query;
 
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyFine;
-import ar.edu.itba.pod.api.model.dto.InfractionAgencyTicketCount;
 import ar.edu.itba.pod.api.model.dto.InfractionRange;
 import ar.edu.itba.pod.api.query4.TopNInfractionsByFineRangeCollator;
 import ar.edu.itba.pod.api.query4.TopNInfractionsByFineRangeCombinerFactory;
@@ -9,14 +8,13 @@ import ar.edu.itba.pod.api.query4.TopNInfractionsByFineRangeMapper;
 import ar.edu.itba.pod.api.query4.TopNInfractionsByFineRangeReducerFactory;
 import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
 import com.hazelcast.core.ICompletableFuture;
-import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings("deprecation")
 public class Query4Client extends QueryClient<InfractionAgencyFine>{
@@ -43,7 +41,7 @@ public class Query4Client extends QueryClient<InfractionAgencyFine>{
     }
 
     @Override
-    void mapReduceJob(KeyValueSource<Long, InfractionAgencyFine> keyValueSource) throws ExecutionException, InterruptedException {
+    void mapReduceJob(KeyValueSource<Long, InfractionAgencyFine> keyValueSource) throws ExecutionException, InterruptedException, IOException {
         JobTracker jobTracker = hazelcastInstance.getJobTracker(JOB_TRACKER_NAME);
         Job<Long, InfractionAgencyFine> job = jobTracker.newJob(keyValueSource);
 

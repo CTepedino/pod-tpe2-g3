@@ -12,6 +12,7 @@ import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 
+import java.io.IOException;
 import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
 
@@ -37,7 +38,7 @@ public class Query3ClientAlt extends QueryClient<PlateDateCounty> {
     }
 
     @Override
-    void mapReduceJob(KeyValueSource<Long, PlateDateCounty> keyValueSource) throws ExecutionException, InterruptedException {
+    void mapReduceJob(KeyValueSource<Long, PlateDateCounty> keyValueSource) throws ExecutionException, InterruptedException, IOException {
         JobTracker jobTracker = hazelcastInstance.getJobTracker(JOB_TRACKER_NAME);
         Job<Long, PlateDateCounty> job = jobTracker.newJob(keyValueSource);
         ICompletableFuture<SortedSet<CountyPercent>> future = job

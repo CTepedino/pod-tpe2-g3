@@ -4,7 +4,6 @@ import ar.edu.itba.pod.api.model.dto.InfractionAgency;
 import ar.edu.itba.pod.api.model.dto.InfractionAgencyTicketCount;
 import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
 import com.hazelcast.core.ICompletableFuture;
-import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
@@ -13,11 +12,11 @@ import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyCombinerFacto
 import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyMapper;
 import ar.edu.itba.pod.api.query1.TotalTicketsByInfractionAndAgencyReducerFactory;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings("deprecation")
 public class Query1Client extends QueryClient<InfractionAgency> {
@@ -43,7 +42,7 @@ public class Query1Client extends QueryClient<InfractionAgency> {
     }
 
     @Override
-    public void mapReduceJob(KeyValueSource<Long, InfractionAgency> keyValueSource) throws ExecutionException, InterruptedException{
+    public void mapReduceJob(KeyValueSource<Long, InfractionAgency> keyValueSource) throws ExecutionException, InterruptedException, IOException {
 
         JobTracker jobTracker = hazelcastInstance.getJobTracker(JOB_TRACKER_NAME);
         Job<Long, InfractionAgency> job = jobTracker.newJob(keyValueSource);

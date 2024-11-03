@@ -2,7 +2,6 @@ package ar.edu.itba.pod.client.query;
 
 import ar.edu.itba.pod.api.model.CSVPrintable;
 import ar.edu.itba.pod.api.model.Ticket;
-import ar.edu.itba.pod.api.model.dto.InfractionAgency;
 import ar.edu.itba.pod.client.csvParser.CityCSVParserFactory;
 import ar.edu.itba.pod.client.util.CSVPrinter;
 import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
@@ -13,9 +12,7 @@ import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.config.GroupConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.core.ISet;
 import com.hazelcast.mapreduce.KeyValueSource;
-import com.hazelcast.query.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +20,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 @SuppressWarnings("deprecation")
@@ -35,7 +31,7 @@ public abstract class QueryClient<ValueIn>{
 
     private static final String TICKET_MAP = GROUP_NAME + "-tickets";
 
-    private final QueryTimer queryTimer;
+    final QueryTimer queryTimer;
 
     final HazelcastInstance hazelcastInstance;
     final QueryPropertiesFactory.QueryProperties properties;
@@ -89,7 +85,7 @@ public abstract class QueryClient<ValueIn>{
     }
 
     abstract KeyValueSource<Long, ValueIn> loadData();
-    abstract void mapReduceJob(KeyValueSource<Long, ValueIn> keyValueSource) throws ExecutionException, InterruptedException;
+    abstract void mapReduceJob(KeyValueSource<Long, ValueIn> keyValueSource) throws ExecutionException, InterruptedException, IOException;
 
     void printResults(String[] headers, String fileName, Iterable<? extends CSVPrintable> results){
         CSVPrinter printer = new CSVPrinter(headers);

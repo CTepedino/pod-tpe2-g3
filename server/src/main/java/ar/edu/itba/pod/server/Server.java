@@ -34,6 +34,20 @@ public class Server {
             }
         }
 
+        int port;
+        String portString = System.getProperty("port");
+        if (portString == null){
+            port = 5701;
+        } else {
+            try {
+                port = Integer.parseInt(portString);
+            } catch (NumberFormatException e){
+                logger.error("Invalid port: {}", portString);
+                throw new IllegalStateException(e.getMessage());
+            }
+        }
+
+
         Config config = new Config();
 
         GroupConfig groupConfig = new GroupConfig().setName(GROUP_NAME).setPassword(GROUP_PASS);
@@ -46,6 +60,7 @@ public class Server {
         InterfacesConfig interfacesConfig = new InterfacesConfig().setInterfaces(addresses).setEnabled(true);
 
         NetworkConfig networkConfig = new NetworkConfig().setInterfaces(interfacesConfig).setJoin(joinConfig);
+        networkConfig.setPort(port);
         config.setNetworkConfig(networkConfig);
 
         Hazelcast.newHazelcastInstance(config);

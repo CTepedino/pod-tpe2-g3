@@ -39,7 +39,12 @@ public abstract class QueryClient<KeyIn, ValueIn>{
         this.properties = properties;
         hazelcastInstance = startHazelcast(properties.getAddresses());
         csvParserFactory = properties.getCity().getParser(properties.getInPath());
-        queryTimer = new QueryTimer(properties.getOutPath() + timeFileName);
+        try {
+            queryTimer = new QueryTimer(properties.getOutPath() + timeFileName);
+        } catch(IOException e){
+            logger.error("Error opening time output file {}", properties.getOutPath());
+            throw new IllegalStateException();
+        }
     }
 
     private HazelcastInstance startHazelcast(List<String> addresses){
@@ -78,7 +83,6 @@ public abstract class QueryClient<KeyIn, ValueIn>{
     public void executeQuery(){
 
         try {
-
             queryTimer.startLoad();
             KeyValueSource<KeyIn, ValueIn> keyValueSource = loadData();
             queryTimer.endLoad();

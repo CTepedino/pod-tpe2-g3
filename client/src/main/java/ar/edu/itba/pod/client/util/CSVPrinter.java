@@ -35,6 +35,8 @@ public class CSVPrinter {
                 writer.write(record.printAsCSV(separator));
                 writer.write('\n');
             }
+
+            writer.flush();
         } catch (IOException e){
             logger.error("Can't write to file {}", outPath);
             throw new IllegalStateException();

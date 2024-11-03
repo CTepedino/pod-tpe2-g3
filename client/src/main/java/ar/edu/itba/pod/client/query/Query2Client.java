@@ -8,17 +8,15 @@ import ar.edu.itba.pod.api.query2.YTDByAgencyMapper;
 import ar.edu.itba.pod.api.query2.YTDByAgencyReducerFactory;
 import ar.edu.itba.pod.client.util.QueryPropertiesFactory;
 import com.hazelcast.core.ICompletableFuture;
-import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.KeyValueSource;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.Job;
 
 
-import java.util.HashSet;
+import java.io.IOException;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings("deprecation")
 public class Query2Client extends QueryClient<AgencyDateFine> {
@@ -40,7 +38,7 @@ public class Query2Client extends QueryClient<AgencyDateFine> {
     }
 
     @Override
-    public void mapReduceJob(KeyValueSource<Long, AgencyDateFine> keyValueSource) throws ExecutionException, InterruptedException{
+    public void mapReduceJob(KeyValueSource<Long, AgencyDateFine> keyValueSource) throws ExecutionException, InterruptedException, IOException {
 
         JobTracker jobTracker = hazelcastInstance.getJobTracker(JOB_TRACKER_NAME);
         Job<Long, AgencyDateFine> job = jobTracker.newJob(keyValueSource);

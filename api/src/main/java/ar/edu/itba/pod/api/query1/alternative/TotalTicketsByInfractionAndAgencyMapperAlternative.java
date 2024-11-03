@@ -1,4 +1,4 @@
-package ar.edu.itba.pod.api.query1;
+package ar.edu.itba.pod.api.query1.alternative;
 
 import ar.edu.itba.pod.api.model.dto.InfractionAgency;
 import com.hazelcast.core.*;

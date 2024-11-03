@@ -1,4 +1,4 @@
-package ar.edu.itba.pod.api.query3.alt;
+package ar.edu.itba.pod.api.query3;
 
 import com.hazelcast.mapreduce.Combiner;
 import com.hazelcast.mapreduce.CombinerFactory;

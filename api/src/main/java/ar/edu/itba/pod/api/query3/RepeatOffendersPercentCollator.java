@@ -1,4 +1,4 @@
-package ar.edu.itba.pod.api.query3.alt;
+package ar.edu.itba.pod.api.query3;
 
 import ar.edu.itba.pod.api.model.dto.CountyPercent;
 import com.hazelcast.mapreduce.Collator;

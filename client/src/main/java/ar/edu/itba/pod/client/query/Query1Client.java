@@ -53,8 +53,7 @@ public class Query1Client extends QueryClient<InfractionAgency> {
                 .reducer(new TotalTicketsByInfractionAndAgencyReducerFactory())
                 .submit(new TotalTicketsByInfractionAndAgencyCollator(infractions));
 
-        SortedSet<InfractionAgencyTicketCount> set = future.get();
-        printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, set);
+        printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, future.get());
     }
 
     public static void main(String[] args){

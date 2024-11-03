@@ -50,8 +50,7 @@ public class Query2Client extends QueryClient<AgencyDateFine> {
                 .reducer(new YTDByAgencyReducerFactory())
                 .submit(new YTDByAgencyCollator());
 
-        SortedSet<AgencyYearMonthYTD> set = future.get();
-        printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, set);
+        printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, future.get());
     }
 
     public static void main(String[] args) {

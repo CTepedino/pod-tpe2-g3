@@ -69,10 +69,7 @@ public class Query1AlternativeClient extends QueryClient<InfractionAgency> {
                 .reducer(new TotalTicketsByInfractionAndAgencyReducerFactory())
                 .submit(new TotalTicketsByInfractionAndAgencyCollator(hazelcastInstance.getMap(INFRACTION_MAP)));
 
-
-        SortedSet<InfractionAgencyTicketCount> set = future.get();
-
-        printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, set);
+        printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, future.get());
     }
 
     public static void main(String[] args){

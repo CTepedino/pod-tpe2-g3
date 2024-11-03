@@ -53,8 +53,7 @@ public class Query4Client extends QueryClient<InfractionAgencyFine>{
                 .reducer(new TopNInfractionsByFineRangeReducerFactory())
                 .submit(new TopNInfractionsByFineRangeCollator(infractions, properties.getN()));
 
-        List<InfractionRange> list = future.get();
-        printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, list);
+        printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, future.get());
     }
 
     public static void main(String[] args){

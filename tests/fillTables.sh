@@ -17,35 +17,35 @@ DROP TABLE IF EXISTS agencies;
 DROP TABLE IF EXISTS infractions;
 
 CREATE TABLE IF NOT EXISTS tickets (
-                                       plate VARCHAR(10),
+    plate VARCHAR(10),
     infraction_id INT,
     fine INT,
     agency VARCHAR(255),
     issue_date DATE,
     county VARCHAR(255)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS infractions (
-                                           id INT PRIMARY KEY,
-                                           description VARCHAR(255)
-    );
+    id INT PRIMARY KEY,
+    description VARCHAR(255)
+);
 
 CREATE TABLE IF NOT EXISTS agencies (
-                                        agency VARCHAR(255) PRIMARY KEY
-    );
+    agency VARCHAR(255) PRIMARY KEY
+);
 
 \copy agencies (agency) FROM '$CSV_PATH/agenciesNYC.csv' WITH (FORMAT csv, DELIMITER ';', HEADER);
 
 \copy infractions (id, description) FROM '$CSV_PATH/infractionsNYC.csv' WITH (FORMAT csv, DELIMITER ';', HEADER);
 
 CREATE TABLE IF NOT EXISTS tickets_staging (
-                                               plate VARCHAR(10),
+    plate VARCHAR(10),
     infraction_id INT,
     fine NUMERIC,
     agency VARCHAR(255),
     issue_date DATE,
     county VARCHAR(255)
-    );
+);
 
 \copy tickets_staging (plate, infraction_id, fine, agency, issue_date, county) FROM '$CSV_PATH/ticketsNYC.csv' WITH (FORMAT csv, DELIMITER ';', HEADER);
 

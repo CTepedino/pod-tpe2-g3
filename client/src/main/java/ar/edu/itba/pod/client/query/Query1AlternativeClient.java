@@ -69,6 +69,7 @@ public class Query1AlternativeClient extends QueryClient<InfractionAgency> {
                 .reducer(new TotalTicketsByInfractionAndAgencyReducerFactory())
                 .submit(new TotalTicketsByInfractionAndAgencyCollator(hazelcastInstance.getMap(INFRACTION_MAP)));
 
+
         printResults(OUT_CSV_HEADERS, OUT_CSV_FILENAME, future.get());
     }
 

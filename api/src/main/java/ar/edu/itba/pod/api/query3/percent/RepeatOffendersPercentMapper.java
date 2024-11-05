@@ -4,10 +4,12 @@ import ar.edu.itba.pod.api.model.dto.PlateCounty;
 import com.hazelcast.mapreduce.Context;
 import com.hazelcast.mapreduce.Mapper;
 
-import java.util.Map;
+import java.util.Collection;
+import java.util.List;
+
 
 @SuppressWarnings("deprecation")
-public class RepeatOffendersPercentMapper implements Mapper<PlateCounty, Map<String, Long>, String, Boolean> {
+public class RepeatOffendersPercentMapper implements Mapper<PlateCounty, List<Long>, String, Boolean> {
     private final int minRepeats;
 
     public RepeatOffendersPercentMapper(int minRepeats) {
@@ -15,9 +17,9 @@ public class RepeatOffendersPercentMapper implements Mapper<PlateCounty, Map<Str
     }
 
     @Override
-    public void map(PlateCounty key, Map<String, Long> value, Context<String, Boolean> context) {
+    public void map(PlateCounty key, List<Long> value, Context<String, Boolean> context) {
         boolean isRepeater = false;
-        for (Long count : value.values()){
+        for (Long count : value){
             if (count >= minRepeats){
                 isRepeater = true;
                 break;

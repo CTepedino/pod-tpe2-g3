@@ -18,6 +18,8 @@ import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.concurrent.ExecutionException;
@@ -50,21 +52,21 @@ public class Query3Client extends QueryClient<InfractionPlateDateCounty>{
     void mapReduceJob(KeyValueSource<Long, InfractionPlateDateCounty> keyValueSource) throws ExecutionException, InterruptedException, IOException {
         JobTracker jobTracker = hazelcastInstance.getJobTracker(JOB_TRACKER_NAME);
         Job<Long, InfractionPlateDateCounty> job = jobTracker.newJob(keyValueSource);
-        ICompletableFuture<Map<PlateCounty, Map<String, Long>>> future = job
+        ICompletableFuture<Map<PlateCounty, List<Long>>> future = job
                 .mapper(new RepeatOffendersCountMapper(properties.getFrom(), properties.getTo()))
                 .combiner(new RepeatOffendersCountCombinerFactory())
                 .reducer(new RepeatOffendersCountReducerFactory())
                 .submit();
 
-        IMap<PlateCounty, Map<String, Long>> repeatOffendersCount = hazelcastInstance.getMap(TICKET_COUNT_MAP);
+        IMap<PlateCounty, List<Long>> repeatOffendersCount = hazelcastInstance.getMap(TICKET_COUNT_MAP);
         repeatOffendersCount.putAll(future.get());
 
         queryTimer.endJob();
         queryTimer.startJob();
 
-        KeyValueSource<PlateCounty, Map<String, Long>> keyValueSource2 = KeyValueSource.fromMap(repeatOffendersCount);
+        KeyValueSource<PlateCounty, List<Long>> keyValueSource2 = KeyValueSource.fromMap(repeatOffendersCount);
         JobTracker job2Tracker = hazelcastInstance.getJobTracker(JOB_2_TRACKER_NAME);
-        Job<PlateCounty, Map<String, Long>> job2 = job2Tracker.newJob(keyValueSource2);
+        Job<PlateCounty, List<Long>> job2 = job2Tracker.newJob(keyValueSource2);
         ICompletableFuture<SortedSet<CountyPercent>> future2 = job2
                 .mapper(new RepeatOffendersPercentMapper(properties.getN()))
                 .combiner(new RepeatOffendersPercentCombinerFactory())

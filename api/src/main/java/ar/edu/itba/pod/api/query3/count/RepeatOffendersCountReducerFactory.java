@@ -4,17 +4,16 @@ import ar.edu.itba.pod.api.model.dto.PlateCounty;
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
-public class RepeatOffendersCountReducerFactory implements ReducerFactory<PlateCounty, Map<String, Long>, Map<String, Long>> {
+public class RepeatOffendersCountReducerFactory implements ReducerFactory<PlateCounty, Map<String, Long>, List<Long>> {
     @Override
-    public Reducer<Map<String, Long>, Map<String, Long>> newReducer(PlateCounty plateCounty) {
+    public Reducer<Map<String, Long>, List<Long>> newReducer(PlateCounty plateCounty) {
         return new RepeatOffendersCountReducer();
     }
 
-    private static class RepeatOffendersCountReducer extends Reducer<Map<String, Long>, Map<String, Long>> {
+    private static class RepeatOffendersCountReducer extends Reducer<Map<String, Long>, List<Long>> {
         private final Map<String, Long> infractions = new HashMap<>();
 
         @Override
@@ -25,8 +24,8 @@ public class RepeatOffendersCountReducerFactory implements ReducerFactory<PlateC
         }
 
         @Override
-        public Map<String, Long> finalizeReduce() {
-            return infractions;
+        public List<Long> finalizeReduce() {
+            return new ArrayList<>(infractions.values());
         }
     }
 }

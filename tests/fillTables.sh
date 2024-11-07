@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Espera el formato de csv de NYC
+# Espera el formato de csv de NYC
 
 if [ "$#" -ne 3 ]; then
     echo "Usage: $0 <database_name> <username> <csv_path>"

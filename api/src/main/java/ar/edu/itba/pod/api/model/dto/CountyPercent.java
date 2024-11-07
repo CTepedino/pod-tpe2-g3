@@ -57,6 +57,6 @@ public class CountyPercent implements DataSerializable, CSVPrintable {
     @Override
     public String printAsCSV(char separator) {
         String percentString = BigDecimal.valueOf(percent).setScale(2, RoundingMode.DOWN) + "%";
-        return county + separator + percentString + separator;
+        return county + separator + percentString;
     }
 }

@@ -8,7 +8,7 @@
 
 ## Compilación
 
-Para compilar el proyecto, se deben ejecutar el siguientes comando desde la carpeta raiz del proyecto:
+Para compilar el proyecto, se deben ejecutar el siguientes comandos desde la carpeta raiz del proyecto:
 
 ```bash
 mvn clean install

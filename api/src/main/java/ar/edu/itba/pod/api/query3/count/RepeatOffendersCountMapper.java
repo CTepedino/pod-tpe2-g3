@@ -9,8 +9,6 @@ import java.time.LocalDate;
 
 @SuppressWarnings("deprecation")
 public class RepeatOffendersCountMapper implements Mapper<Long, InfractionPlateDateCounty, PlateCounty, String> {
-    private static final Long ONE = 1L;
-
     private final LocalDate from;
     private final LocalDate to;
 
